@@ -1,0 +1,7 @@
+[
+	"nan21.dnet.module.sd.ui.extjs/dc/SalesInvoiceTax_Dc", 
+	"nan21.dnet.module.sd.ui.extjs/dc/SalesInvoiceInfo_Dc", 
+	"nan21.dnet.module.sd.ui.extjs/dc/SalesInvoiceLineTax_Dc", 
+	"nan21.dnet.module.sd.ui.extjs/dc/SalesInvoice_Dc", 
+	"nan21.dnet.module.sd.ui.extjs/dc/SalesInvoiceLine_Dc"
+]

@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:context="http://www.springframework.org/schema/context"
+	xsi:schemaLocation="
+			http://www.springframework.org/schema/beans
+				http://www.springframework.org/schema/beans/spring-beans.xsd
+			http://www.springframework.org/schema/context 
+				http://www.springframework.org/schema/context/spring-context.xsd">
+	
+	<!-- ==================== SalesInvoice ==================== -->
+		
+	<bean id="SalesInvoice_Ds" scope="singleton" lazy-init="true"
+		class="net.nan21.dnet.core.presenter.service.ds.DefaultEntityDsService">
+		<property name="modelClass" value="net.nan21.dnet.module.sd.presenter.impl.invoice.model.SalesInvoice_Ds"/>
+		<property name="filterClass" value="net.nan21.dnet.module.sd.presenter.impl.invoice.model.SalesInvoice_DsFilter"/>
+		<property name="entityClass" value="net.nan21.dnet.module.tx.domain.impl.sale.SalesInvoice"/>
+		<property name="paramClass" value="net.nan21.dnet.module.sd.presenter.impl.invoice.model.SalesInvoice_DsParam"/>
+		<property name="queryBuilderClass" value="net.nan21.dnet.module.sd.presenter.impl.invoice.qb.SalesInvoice_DsQb" />
+		<property name="converterClass" value="net.nan21.dnet.module.sd.presenter.impl.invoice.cnv.SalesInvoice_DsCnv" />
+		<property name="rpcData" >
+			<map>
+				<entry key="confirm">
+					<bean class="net.nan21.dnet.core.presenter.descriptor.RpcDefinition">
+						<constructor-arg name="delegateClass" value="net.nan21.dnet.module.sd.presenter.ext.invoice.delegate.SalesInvoice_Pd"/>
+						<constructor-arg name="methodName" value="confirm" />
+						<constructor-arg name="reloadFromEntity" value="true" />
+					</bean>
+				</entry>
+				<entry key="unConfirm">
+					<bean class="net.nan21.dnet.core.presenter.descriptor.RpcDefinition">
+						<constructor-arg name="delegateClass" value="net.nan21.dnet.module.sd.presenter.ext.invoice.delegate.SalesInvoice_Pd"/>
+						<constructor-arg name="methodName" value="unConfirm" />
+						<constructor-arg name="reloadFromEntity" value="true" />
+					</bean>
+				</entry>
+				<entry key="post">
+					<bean class="net.nan21.dnet.core.presenter.descriptor.RpcDefinition">
+						<constructor-arg name="delegateClass" value="net.nan21.dnet.module.sd.presenter.ext.invoice.delegate.SalesInvoice_Pd"/>
+						<constructor-arg name="methodName" value="post" />
+						<constructor-arg name="reloadFromEntity" value="true" />
+					</bean>
+				</entry>
+				<entry key="unPost">
+					<bean class="net.nan21.dnet.core.presenter.descriptor.RpcDefinition">
+						<constructor-arg name="delegateClass" value="net.nan21.dnet.module.sd.presenter.ext.invoice.delegate.SalesInvoice_Pd"/>
+						<constructor-arg name="methodName" value="unPost" />
+						<constructor-arg name="reloadFromEntity" value="true" />
+					</bean>
+				</entry>
+				<entry key="copyLines">
+					<bean class="net.nan21.dnet.core.presenter.descriptor.RpcDefinition">
+						<constructor-arg name="delegateClass" value="net.nan21.dnet.module.sd.presenter.ext.invoice.delegate.SalesInvoice_Pd"/>
+						<constructor-arg name="methodName" value="copyLines" />
+					</bean>
+				</entry>
+			</map>
+		</property>
+	</bean>
+	
+	<!-- ==================== SalesInvoiceLov ==================== -->
+		
+	<bean id="SalesInvoiceLov_Ds" scope="singleton" lazy-init="true"
+		class="net.nan21.dnet.core.presenter.service.ds.DefaultEntityDsService">
+		<property name="modelClass" value="net.nan21.dnet.module.sd.presenter.impl.invoice.model.SalesInvoiceLov_Ds"/>
+		<property name="entityClass" value="net.nan21.dnet.module.tx.domain.impl.sale.SalesInvoice"/>
+		<property name="readOnly" value="true" />
+	</bean>
+	
+	<!-- ==================== SalesInvoiceInfo ==================== -->
+		
+	<bean id="SalesInvoiceInfo_Ds" scope="singleton" lazy-init="true"
+		class="net.nan21.dnet.core.presenter.service.ds.DefaultEntityDsService">
+		<property name="modelClass" value="net.nan21.dnet.module.sd.presenter.impl.invoice.model.SalesInvoiceInfo_Ds"/>
+		<property name="entityClass" value="net.nan21.dnet.module.tx.domain.impl.sale.SalesInvoice"/>
+	</bean>
+	
+	<!-- ==================== SalesInvoiceTax ==================== -->
+		
+	<bean id="SalesInvoiceTax_Ds" scope="singleton" lazy-init="true"
+		class="net.nan21.dnet.core.presenter.service.ds.DefaultEntityDsService">
+		<property name="modelClass" value="net.nan21.dnet.module.sd.presenter.impl.invoice.model.SalesInvoiceTax_Ds"/>
+		<property name="entityClass" value="net.nan21.dnet.module.tx.domain.impl.sale.SalesInvoiceTax"/>
+		<property name="readOnly" value="true" />
+	</bean>
+	
+	<!-- ==================== SalesInvoiceLine ==================== -->
+		
+	<bean id="SalesInvoiceLine_Ds" scope="singleton" lazy-init="true"
+		class="net.nan21.dnet.core.presenter.service.ds.DefaultEntityDsService">
+		<property name="modelClass" value="net.nan21.dnet.module.sd.presenter.impl.invoice.model.SalesInvoiceLine_Ds"/>
+		<property name="entityClass" value="net.nan21.dnet.module.tx.domain.impl.sale.SalesInvoiceLine"/>
+		<property name="converterClass" value="net.nan21.dnet.module.sd.presenter.impl.invoice.cnv.SalesInvoiceLine_DsCnv" />
+		<property name="rpcData" >
+			<map>
+				<entry key="onProductChange">
+					<bean class="net.nan21.dnet.core.presenter.descriptor.RpcDefinition">
+						<constructor-arg name="delegateClass" value="net.nan21.dnet.module.sd.presenter.ext.invoice.delegate.SalesInvoiceLine_Pd"/>
+						<constructor-arg name="methodName" value="onProductChange" />
+					</bean>
+				</entry>
+			</map>
+		</property>
+	</bean>
+	
+	<!-- ==================== SalesInvoiceLineTax ==================== -->
+		
+	<bean id="SalesInvoiceLineTax_Ds" scope="singleton" lazy-init="true"
+		class="net.nan21.dnet.core.presenter.service.ds.DefaultEntityDsService">
+		<property name="modelClass" value="net.nan21.dnet.module.sd.presenter.impl.invoice.model.SalesInvoiceLineTax_Ds"/>
+		<property name="entityClass" value="net.nan21.dnet.module.tx.domain.impl.sale.SalesInvoiceLineTax"/>
+		<property name="readOnly" value="true" />
+	</bean>
+</beans>

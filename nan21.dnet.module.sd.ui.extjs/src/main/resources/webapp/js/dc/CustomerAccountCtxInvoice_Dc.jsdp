@@ -1,0 +1,5 @@
+[
+	"nan21.dnet.module.sd.ui.extjs/ds/SalesInvoice_Ds", 
+	"nan21.dnet.module.md.ui.extjs/lov/DocTypes_Lov", 
+	"nan21.dnet.module.bd.ui.extjs/lov/Currencies_Lov"
+]
