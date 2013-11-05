@@ -21,7 +21,7 @@ public class SalesInvoice_DsQb
 		if (this.params != null
 				&& this.params.getFilterProductAccountId() != null
 				&& !"".equals(this.params.getFilterProductAccountId())) {
-			addFilterCondition("  e.id in (select l.invoice.id from SalesInvoiceLine l where l.productAccount.id = :filterProductAccountId) ");
+			addFilterCondition("  e.id in (select l.invoice.id from SalesInvoiceLine l where l.productAccount.id = :filterProductAccountId and l.clientId =:clientId ) ");
 			addCustomFilterItem("filterProductAccountId",
 					this.params.getFilterProductAccountId());
 		}
