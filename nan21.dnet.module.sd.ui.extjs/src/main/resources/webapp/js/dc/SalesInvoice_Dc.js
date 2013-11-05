@@ -106,6 +106,36 @@ Ext.define(Dnet.ns.sd + "SalesInvoice_Dc$List" , {
 	}
 });
 
+/* ================= EDIT FORM: CopyLinesForm ================= */
+
+Ext.define(Dnet.ns.sd + "SalesInvoice_Dc$CopyLinesForm" , {
+	extend: "dnet.core.dc.view.AbstractDcvEditForm",
+	alias: "widget.sd_SalesInvoice_Dc$CopyLinesForm",
+
+	/**
+	 * Components definition
+	 */
+	_defineElements_: function() {
+		this._getBuilder_()
+		
+		/* =========== controls =========== */
+		.addLov({name:"copyFrom", paramIndex:"copyFrom", xtype:"sd_SalesInvoices_Lov",
+			retFieldMapping: [{lovField:"id", dsParam: "copyFromId"} ],
+			filterFieldMapping: [{lovField:"bpAccountId", dsField: "bpAccountId"} ]})
+		
+		/* =========== containers =========== */
+		.addPanel({ name:"main", autoScroll:true, layout:"form"});
+	},
+
+	/**
+	 * Combine the components
+	 */			
+	_linkElements_: function() {
+		this._getBuilder_()
+		.addChildrenTo("main", ["copyFrom"]);
+	}
+});
+
 /* ================= EDIT FORM: Create ================= */
 
 Ext.define(Dnet.ns.sd + "SalesInvoice_Dc$Create" , {
@@ -163,6 +193,7 @@ Ext.define(Dnet.ns.sd + "SalesInvoice_Dc$Edit" , {
 		.addDateField({name:"docDate", dataIndex:"docDate", noEdit:true })
 		.addTextField({ name:"company", dataIndex:"company", noEdit:true , caseRestriction:"uppercase"})
 		.addTextField({ name:"bpartner", dataIndex:"bpartner", noEdit:true , caseRestriction:"uppercase"})
+		.addTextArea({ name:"notes", dataIndex:"notes", height:80})
 		.addTextField({ name:"currency", dataIndex:"currency", noEdit:true , fieldCls:"important-field", caseRestriction:"uppercase"})
 		.addNumberField({name:"netAmount", dataIndex:"netAmount", noEdit:true , decimals:6})
 		.addNumberField({name:"taxAmount", dataIndex:"taxAmount", noEdit:true , decimals:6})
@@ -176,7 +207,8 @@ Ext.define(Dnet.ns.sd + "SalesInvoice_Dc$Edit" , {
 		.addPanel({ name:"col1", width:250, layout:"form"})
 		.addPanel({ name:"col2", width:200, layout:"form"})
 		.addPanel({ name:"col3", width:250, layout:"form"})
-		.addPanel({ name:"col4", width:170, layout:"form"});
+		.addPanel({ name:"col4", width:170, layout:"form"})
+		.addPanel({ name:"col5", width:250, layout:"form", defaults:{labelAlign:"top"}});
 	},
 
 	/**
@@ -184,11 +216,12 @@ Ext.define(Dnet.ns.sd + "SalesInvoice_Dc$Edit" , {
 	 */			
 	_linkElements_: function() {
 		this._getBuilder_()
-		.addChildrenTo("main", ["col1", "col2", "col3", "col4"])
+		.addChildrenTo("main", ["col1", "col2", "col3", "col4", "col5"])
 		.addChildrenTo("col1", ["docType", "company", "bpartner"])
 		.addChildrenTo("col2", ["docDate", "docNo", "currency"])
 		.addChildrenTo("col3", ["netAmount", "taxAmount", "amount"])
-		.addChildrenTo("col4", ["confirmed", "posted"]);
+		.addChildrenTo("col4", ["confirmed", "posted"])
+		.addChildrenTo("col5", ["notes"]);
 	},
 	/* ==================== Business functions ==================== */
 	

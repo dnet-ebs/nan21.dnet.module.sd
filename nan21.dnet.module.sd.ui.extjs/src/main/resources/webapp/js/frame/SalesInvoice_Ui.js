@@ -33,6 +33,8 @@ Ext.define(Dnet.ns.sd + "SalesInvoice_Ui" , {
 	 */
 	_defineElements_: function() {
 		this._getBuilder_()
+		.addButton({name:"btnShowBpAccount", disabled:true, handler: this.onBtnShowBpAccount,
+				stateManager:{ name:"selected_one", dc:"inv" }, scope:this})
 		.addButton({name:"btnConfirm", iconCls:"icon-action-commit", disabled:true, handler: this.onBtnConfirm,
 				stateManager:{ name:"selected_one_clean", dc:"inv" , and: function(dc) {return (dc.record && !dc.record.get("confirmed"));}}, scope:this})
 		.addButton({name:"btnUnConfirm", iconCls:"icon-action-rollback", disabled:true, handler: this.onBtnUnConfirm,
@@ -41,6 +43,9 @@ Ext.define(Dnet.ns.sd + "SalesInvoice_Ui" , {
 				stateManager:{ name:"selected_one_clean", dc:"inv" , and: function(dc) {return (dc.record && dc.record.get("confirmed")&& !dc.record.get("posted"));}}, scope:this})
 		.addButton({name:"btnUnPost", iconCls:"icon-action-rollback", disabled:true, handler: this.onBtnUnPost,
 				stateManager:{ name:"selected_one_clean", dc:"inv" , and: function(dc) {return (dc.record && dc.record.get("confirmed") &&  dc.record.get("confirmed") && dc.record.get("posted") );}}, scope:this})
+		.addButton({name:"btnShowCopyLines", disabled:true, handler: this.onBtnShowCopyLines,
+				stateManager:{ name:"record_is_clean", dc:"inv" , and: function(dc) {return (dc.record && !dc.record.get("confirmed"));}}, scope:this})
+		.addButton({name:"btnDoCopyLines", disabled:false, handler: this.onBtnDoCopyLines, scope:this})
 		.addButton({name:"btnCreateContinue", disabled:true, handler: this.onBtnCreateContinue,
 				stateManager:{ name:"record_is_dirty", dc:"inv" , and: function(dc) {return (dc.record.isValid());}}, scope:this})
 		.addButton({name:"btnCreateCancel", disabled:false, handler: this.onBtnCreateCancel, scope:this})
@@ -49,6 +54,11 @@ Ext.define(Dnet.ns.sd + "SalesInvoice_Ui" , {
 		.addDcFormView("inv", {name:"invCreate", xtype:"sd_SalesInvoice_Dc$Create"})
 		.addDcFormView("inv", {name:"invEditMain", xtype:"sd_SalesInvoice_Dc$Edit"})
 		.addDcFormView("info", {name:"infoEdit", _hasTitle_:true, xtype:"sd_SalesInvoiceInfo_Dc$Edit"})
+		.addDcFormView("inv", {name:"copyLinesForm", width:400, xtype:"sd_SalesInvoice_Dc$CopyLinesForm"})
+		.addWindow({name:"wdwCopyLines", _hasTitle_:true, closeAction:'hide', resizable:true, layout:"fit", modal:true,
+			items:[this._elems_.get("copyLinesForm")], 
+					dockedItems:[{xtype:"toolbar", ui:"footer", dock:'bottom', weight:-1,
+						items:[ this._elems_.get("btnDoCopyLines")]}]})
 		.addDcGridView("tax", {name:"taxList", _hasTitle_:true, xtype:"sd_SalesInvoiceTax_Dc$List"})
 		.addDcFilterFormView("line", {name:"lineFilter", _hasTitle_:true, width:250, xtype:"sd_SalesInvoiceLine_Dc$FilterCtx", collapsible:true, collapsed:true
 		})
@@ -103,7 +113,7 @@ Ext.define(Dnet.ns.sd + "SalesInvoice_Ui" , {
 			.addTitle().addSeparator().addSeparator()
 			.addBack().addSave().addNew().addCopy().addCancel().addPrevRec().addNextRec()
 			.addSeparator().addSeparator()
-			.addButtons([this._elems_.get("btnConfirm") ,this._elems_.get("btnUnConfirm") ,this._elems_.get("btnPost") ,this._elems_.get("btnUnPost") ])
+			.addButtons([this._elems_.get("btnShowBpAccount") ,this._elems_.get("btnShowCopyLines") ,this._elems_.get("btnConfirm") ,this._elems_.get("btnUnConfirm") ,this._elems_.get("btnPost") ,this._elems_.get("btnUnPost") ])
 			.addReports()
 		.end()
 		.beginToolbar("tlbInfoEdit", {dc: "info"})
@@ -140,6 +150,26 @@ Ext.define(Dnet.ns.sd + "SalesInvoice_Ui" , {
 		.end();
 	}
 
+	
+	/**
+	 * On-Click handler for button btnShowBpAccount
+	 */
+	,onBtnShowBpAccount: function() {
+		var bundle = Dnet.bundle.sd;
+		var frame = "CustomerAccount_Ui";
+		getApplication().showFrame(frame,{
+			url:Dnet.buildUiPath(bundle, frame, false),
+			params: {
+				company: this._getDc_("inv").getRecord().get("company"),
+				companyId: this._getDc_("inv").getRecord().get("companyId"),
+				bpartner: this._getDc_("inv").getRecord().get("bpartner"),
+				bpartnerId: this._getDc_("inv").getRecord().get("bpartnerId")
+			},
+			callback: function (params) {
+				this._when_called_to_edit_(params);
+			}
+		});
+	}
 	
 	/**
 	 * On-Click handler for button btnConfirm
@@ -180,6 +210,38 @@ Ext.define(Dnet.ns.sd + "SalesInvoice_Ui" , {
 	,onBtnUnPost: function() {
 		var o={
 			name:"unPost",
+			modal:true
+		};
+		this._getDc_("inv").doRpcData(o);
+	}
+	
+	/**
+	 * On-Click handler for button btnShowCopyLines
+	 */
+	,onBtnShowCopyLines: function() {
+		this._getWindow_("wdwCopyLines").show();
+	}
+	
+	/**
+	 * On-Click handler for button btnDoCopyLines
+	 */
+	,onBtnDoCopyLines: function() {
+		var successFn = function(dc,response,serviceName,specs) {
+			this._getDc_("line").doQuery();
+			this._getDc_("inv").doReloadRecord();
+			this._getWindow_("wdwCopyLines").close();
+		};
+		var failureFn = function(dc,response,serviceName,specs) {
+			this._getWindow_("wdwCopyLines").close();
+		}; 
+		var o={
+			name:"copyLines",
+			callbacks:{
+				successFn: successFn,
+				successScope: this,
+				failureFn: failureFn,
+				failureScope: this
+			},
 			modal:true
 		};
 		this._getDc_("inv").doRpcData(o);

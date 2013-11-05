@@ -15,7 +15,7 @@ Ext.define(Dnet.ns.sd + "SalesInvoiceLine_Ds", {
 	
 	initRecord: function() {
 		this.set("quantity", 1);
-		this.set("unitPrice", 0);
+		this.set("unitPrice", 0.0);
 		this.set("netAmount", 0);
 		this.set("taxAmount", 0);
 		this.set("amount", 0);
