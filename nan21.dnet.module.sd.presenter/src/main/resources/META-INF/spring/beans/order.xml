@@ -39,6 +39,13 @@
 						<constructor-arg name="methodName" value="copyLines" />
 					</bean>
 				</entry>
+				<entry key="generateInvoice">
+					<bean class="net.nan21.dnet.core.presenter.descriptor.RpcDefinition">
+						<constructor-arg name="delegateClass" value="net.nan21.dnet.module.sd.presenter.ext.order.delegate.SalesOrder_Pd"/>
+						<constructor-arg name="methodName" value="generateInvoice" />
+						<constructor-arg name="reloadFromEntity" value="true" />
+					</bean>
+				</entry>
 			</map>
 		</property>
 	</bean>

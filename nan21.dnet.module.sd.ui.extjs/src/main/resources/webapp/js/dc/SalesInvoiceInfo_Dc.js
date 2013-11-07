@@ -48,5 +48,13 @@ Ext.define(Dnet.ns.sd + "SalesInvoiceInfo_Dc$Edit" , {
 		.addChildrenTo("main", ["panelBilling", "panelPayment"])
 		.addChildrenTo("panelBilling", ["billToLocation", "billToContact"])
 		.addChildrenTo("panelPayment", ["paymentTerm", "paymentMethod"]);
+	},
+	/* ==================== Business functions ==================== */
+	
+	_beforeApplyStates_: function(record) {
+		if (record.get("confirmed") || record.get("posted") ) {
+			this._disableAllFields_();
+			return false;
+		}
 	}
 });

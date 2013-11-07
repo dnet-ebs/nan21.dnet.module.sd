@@ -25,6 +25,8 @@ import net.nan21.dnet.module.tx.domain.impl.sale.SalesOrder;
 		@RefLookup(refId = SalesOrderInfo_Ds.f_paymentTermId, namedQuery = PaymentTerm.NQ_FIND_BY_NAME, params = {@Param(name = "name", field = SalesOrderInfo_Ds.f_paymentTerm)})})
 public class SalesOrderInfo_Ds extends AbstractAuditableDs<SalesOrder> {
 
+	public static final String f_confirmed = "confirmed";
+	public static final String f_invoiced = "invoiced";
 	public static final String f_bpartnerId = "bpartnerId";
 	public static final String f_bpartnerRefid = "bpartnerRefid";
 	public static final String f_billToLocationId = "billToLocationId";
@@ -42,6 +44,12 @@ public class SalesOrderInfo_Ds extends AbstractAuditableDs<SalesOrder> {
 	public static final String f_paymentMethodName = "paymentMethodName";
 	public static final String f_paymentTermId = "paymentTermId";
 	public static final String f_paymentTerm = "paymentTerm";
+
+	@DsField(noInsert = true, noUpdate = true)
+	private Boolean confirmed;
+
+	@DsField(noInsert = true, noUpdate = true)
+	private Boolean invoiced;
 
 	@DsField(join = "left", path = "bpAccount.bpartner.id")
 	private String bpartnerId;
@@ -100,6 +108,22 @@ public class SalesOrderInfo_Ds extends AbstractAuditableDs<SalesOrder> {
 
 	public SalesOrderInfo_Ds(SalesOrder e) {
 		super(e);
+	}
+
+	public Boolean getConfirmed() {
+		return this.confirmed;
+	}
+
+	public void setConfirmed(Boolean confirmed) {
+		this.confirmed = confirmed;
+	}
+
+	public Boolean getInvoiced() {
+		return this.invoiced;
+	}
+
+	public void setInvoiced(Boolean invoiced) {
+		this.invoiced = invoiced;
 	}
 
 	public String getBpartnerId() {

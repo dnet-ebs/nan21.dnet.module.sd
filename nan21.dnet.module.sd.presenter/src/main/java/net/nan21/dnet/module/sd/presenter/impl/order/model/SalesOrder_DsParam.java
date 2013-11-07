@@ -12,6 +12,8 @@ public class SalesOrder_DsParam {
 	public static final String f_filterPeriod = "filterPeriod";
 	public static final String f_filterProductAccount = "filterProductAccount";
 	public static final String f_filterProductAccountId = "filterProductAccountId";
+	public static final String f_invDocTypeId = "invDocTypeId";
+	public static final String f_invDocType = "invDocType";
 
 	private String copyFromId;
 
@@ -22,6 +24,10 @@ public class SalesOrder_DsParam {
 	private String filterProductAccount;
 
 	private String filterProductAccountId;
+
+	private String invDocTypeId;
+
+	private String invDocType;
 
 	public String getCopyFromId() {
 		return this.copyFromId;
@@ -61,5 +67,21 @@ public class SalesOrder_DsParam {
 
 	public void setFilterProductAccountId(String filterProductAccountId) {
 		this.filterProductAccountId = filterProductAccountId;
+	}
+
+	public String getInvDocTypeId() {
+		return this.invDocTypeId;
+	}
+
+	public void setInvDocTypeId(String invDocTypeId) {
+		this.invDocTypeId = invDocTypeId;
+	}
+
+	public String getInvDocType() {
+		return this.invDocType;
+	}
+
+	public void setInvDocType(String invDocType) {
+		this.invDocType = invDocType;
 	}
 }

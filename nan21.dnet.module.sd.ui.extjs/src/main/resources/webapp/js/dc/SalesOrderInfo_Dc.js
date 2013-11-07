@@ -56,5 +56,16 @@ Ext.define(Dnet.ns.sd + "SalesOrderInfo_Dc$Edit" , {
 		.addChildrenTo("panelBilling", ["billToLocation", "billToContact"])
 		.addChildrenTo("panelShipping", ["shipToLocation", "shipToContact"])
 		.addChildrenTo("panelPayment", ["paymentTerm", "paymentMethod"]);
+	},
+	/* ==================== Business functions ==================== */
+	
+	_beforeApplyStates_: function(record) {
+		
+		var retVal = true;
+		if (record.get("invoiced") ) {
+			this._disableFields_(["billToLocation","billToContact","paymentMethod","paymentTerm"]);
+			retVal = false;
+		}
+		return retVal;
 	}
 });

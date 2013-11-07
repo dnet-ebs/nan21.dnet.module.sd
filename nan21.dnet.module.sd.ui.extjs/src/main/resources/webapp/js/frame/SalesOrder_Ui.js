@@ -41,19 +41,23 @@ Ext.define(Dnet.ns.sd + "SalesOrder_Ui" , {
 		.addButton({name:"btnConfirm", iconCls:"icon-action-commit", disabled:true, handler: this.onBtnConfirm,
 				stateManager:{ name:"selected_one_clean", dc:"ord" , and: function(dc) {return (dc.record && !dc.record.get("confirmed"));}}, scope:this})
 		.addButton({name:"btnUnConfirm", iconCls:"icon-action-rollback", disabled:true, handler: this.onBtnUnConfirm,
-				stateManager:{ name:"selected_one_clean", dc:"ord" , and: function(dc) {return (dc.record && dc.record.get("confirmed")  );}}, scope:this})
+				stateManager:{ name:"selected_one_clean", dc:"ord" , and: function(dc) {return (dc.record && dc.record.get("confirmed") && !dc.record.get("invoiced")  );}}, scope:this})
 		.addButton({name:"btnShowCopyLines", disabled:true, handler: this.onBtnShowCopyLines,
 				stateManager:{ name:"record_is_clean", dc:"ord" , and: function(dc) {return (dc.record && !dc.record.get("confirmed"));}}, scope:this})
 		.addButton({name:"btnDoCopyLines", disabled:false, handler: this.onBtnDoCopyLines, scope:this})
 		.addButton({name:"btnCreateContinue", disabled:true, handler: this.onBtnCreateContinue,
 				stateManager:{ name:"record_is_dirty", dc:"ord" , and: function(dc) {return (dc.record.isValid());}}, scope:this})
 		.addButton({name:"btnCreateCancel", disabled:false, handler: this.onBtnCreateCancel, scope:this})
+		.addButton({name:"btnCreateInvoice", disabled:true, handler: this.onBtnCreateInvoice,
+				stateManager:{ name:"selected_one_clean", dc:"ord" , and: function(dc) {return (dc.record && dc.record.get("confirmed") && ! dc.record.get("invoiced"));}}, scope:this})
+		.addButton({name:"btnCreateInvoiceOk", disabled:false, handler: this.onBtnCreateInvoiceOk, scope:this})
 		.addDcFilterFormView("ord", {name:"ordFilter", xtype:"sd_SalesOrder_Dc$Filter"})
 		.addDcGridView("ord", {name:"ordList", xtype:"sd_SalesOrder_Dc$List"})
 		.addDcFormView("ord", {name:"ordCreate", xtype:"sd_SalesOrder_Dc$Create", _acquireFocusUpdate_: false})
 		.addDcFormView("ord", {name:"ordEditMain", xtype:"sd_SalesOrder_Dc$Edit", _acquireFocusInsert_: false})
 		.addDcFormView("info", {name:"infoEdit", _hasTitle_:true, xtype:"sd_SalesOrderInfo_Dc$Edit"})
 		.addDcFormView("ord", {name:"copyLinesForm", width:400, xtype:"sd_SalesOrder_Dc$CopyLinesForm"})
+		.addDcFormView("ord", {name:"genInvoiceForm", xtype:"sd_SalesOrder_Dc$FrmGenInvoice"})
 		.addWindow({name:"wdwCopyLines", _hasTitle_:true, closeAction:'hide', resizable:true, layout:"fit", modal:true,
 			items:[this._elems_.get("copyLinesForm")], 
 					dockedItems:[{xtype:"toolbar", ui:"footer", dock:'bottom', weight:-1,
@@ -71,6 +75,10 @@ Ext.define(Dnet.ns.sd + "SalesOrder_Ui" , {
 			, 
 					dockedItems:[{xtype:"toolbar", ui:"footer", dock:'bottom', weight:-1,
 						items:[ this._elems_.get("btnCreateContinue"), this._elems_.get("btnCreateCancel")]}]})
+		.addWindow({name:"wdwGenInvoice", _hasTitle_:true, width:400, height:120, closeAction:'hide', resizable:true, layout:"fit", modal:true,
+			items:[this._elems_.get("genInvoiceForm")], 
+					dockedItems:[{xtype:"toolbar", ui:"footer", dock:'bottom', weight:-1,
+						items:[ this._elems_.get("btnCreateInvoiceOk")]}]})
 		.addPanel({name:"main", layout:"card", activeItem:0})
 		.addPanel({name:"canvas1", preventHeader:true, isCanvas:true, layout:"border", defaults:{split:true}})
 		.addPanel({name:"canvas2", preventHeader:true, isCanvas:true, layout:"border", defaults:{split:true}})
@@ -114,7 +122,7 @@ Ext.define(Dnet.ns.sd + "SalesOrder_Ui" , {
 			.addTitle().addSeparator().addSeparator()
 			.addBack().addSave().addNew().addCopy().addCancel().addPrevRec().addNextRec()
 			.addSeparator().addSeparator()
-			.addButtons([this._elems_.get("btnShowBpAccount") ,this._elems_.get("btnShowCopyLines") ,this._elems_.get("btnConfirm") ,this._elems_.get("btnUnConfirm") ])
+			.addButtons([this._elems_.get("btnShowBpAccount") ,this._elems_.get("btnShowCopyLines") ,this._elems_.get("btnConfirm") ,this._elems_.get("btnUnConfirm") ,this._elems_.get("btnCreateInvoice") ])
 			.addReports()
 		.end()
 		.beginToolbar("tlbInfoEdit", {dc: "info"})
@@ -247,6 +255,31 @@ Ext.define(Dnet.ns.sd + "SalesOrder_Ui" , {
 		this._getDc_("ord").doCancel();
 	}
 	
+	/**
+	 * On-Click handler for button btnCreateInvoice
+	 */
+	,onBtnCreateInvoice: function() {
+		this._getWindow_("wdwGenInvoice").show();
+	}
+	
+	/**
+	 * On-Click handler for button btnCreateInvoiceOk
+	 */
+	,onBtnCreateInvoiceOk: function() {
+		var successFn = function(dc,response,serviceName,specs) {
+			this._getWindow_("wdwGenInvoice").close();
+		};
+		var o={
+			name:"generateInvoice",
+			callbacks:{
+				successFn: successFn,
+				successScope: this
+			},
+			modal:true
+		};
+		this._getDc_("ord").doRpcData(o);
+	}
+	
 	,_whenCreateNewDoc_: function() {	
 		this._getWindow_("wdwCreate").show();
 	}
@@ -258,6 +291,29 @@ Ext.define(Dnet.ns.sd + "SalesOrder_Ui" , {
 				function() {
 					this._getDc_("ord").doReloadRecord();
 				} , this );
+	}
+	
+	,onAfterDefineDcs: function() {
+		
+								this._getDc_("ord").on("afterDoServiceSuccess", 
+								function() { this._applyStateAllButtons_(); this._syncReadOnlyStates_();} , this );
+								this._getDc_("ord").on("recordChange", this._syncReadOnlyStates_, this );
+	}
+	
+	,_syncReadOnlyStates_: function() {
+		
+							var rec = this._getDc_("ord").getRecord();
+							if (!rec) { return; }
+							var lineDc = this._getDc_("line");
+							if (rec.get("confirmed")) {
+								if (!lineDc.isReadOnly()) {
+									lineDc.setReadOnly(true);
+								}
+							} else {
+								if (lineDc.isReadOnly()) {
+									lineDc.setReadOnly(false);
+								}
+							}
 	}
 	
 	,_when_called_to_edit_: function(params) {
@@ -275,5 +331,8 @@ Ext.define(Dnet.ns.sd + "SalesOrder_Ui" , {
 		ord.setFilterValue("company", params.company );
 		ord.doQuery();
 		this._showStackedViewElement_("main",1);
+	}
+	,_afterDefineDcs_: function() {
+		this.onAfterDefineDcs();
 	}
 });

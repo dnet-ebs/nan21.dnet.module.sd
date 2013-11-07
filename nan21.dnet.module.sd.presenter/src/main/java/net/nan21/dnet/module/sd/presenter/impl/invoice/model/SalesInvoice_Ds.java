@@ -19,6 +19,7 @@ import net.nan21.dnet.module.md.domain.impl.base.DocType;
 import net.nan21.dnet.module.md.domain.impl.bp.BpAccount;
 import net.nan21.dnet.module.md.domain.impl.org.Org;
 import net.nan21.dnet.module.tx.domain.impl.sale.SalesInvoice;
+import net.nan21.dnet.module.tx.domain.impl.sale.SalesOrder;
 
 @Ds(entity = SalesInvoice.class, sort = {@SortField(field = SalesInvoice_Ds.f_docDate, desc = true)})
 @RefLookups({
@@ -27,7 +28,8 @@ import net.nan21.dnet.module.tx.domain.impl.sale.SalesInvoice;
 		@RefLookup(refId = SalesInvoice_Ds.f_companyId, namedQuery = Org.NQ_FIND_BY_CODE, params = {@Param(name = "code", field = SalesInvoice_Ds.f_company)}),
 		@RefLookup(refId = SalesInvoice_Ds.f_bpAccountId, namedQuery = BpAccount.NQ_FIND_BY_ORG_BP_PRIMITIVE, params = {
 				@Param(name = "companyId", field = SalesInvoice_Ds.f_companyId),
-				@Param(name = "bpartnerId", field = SalesInvoice_Ds.f_bpartnerId)})})
+				@Param(name = "bpartnerId", field = SalesInvoice_Ds.f_bpartnerId)}),
+		@RefLookup(refId = SalesInvoice_Ds.f_salesOrderId, namedQuery = SalesOrder.NQ_FIND_BY_DOCNO, params = {@Param(name = "docNo", field = SalesInvoice_Ds.f_salesOrder)})})
 public class SalesInvoice_Ds extends AbstractAuditableDs<SalesInvoice> {
 
 	public static final String f_docNo = "docNo";
@@ -55,6 +57,8 @@ public class SalesInvoice_Ds extends AbstractAuditableDs<SalesInvoice> {
 	public static final String f_netAmountRef = "netAmountRef";
 	public static final String f_taxAmountRef = "taxAmountRef";
 	public static final String f_amountRef = "amountRef";
+	public static final String f_salesOrderId = "salesOrderId";
+	public static final String f_salesOrder = "salesOrder";
 
 	@DsField
 	private String docNo;
@@ -130,6 +134,12 @@ public class SalesInvoice_Ds extends AbstractAuditableDs<SalesInvoice> {
 
 	@DsField(noInsert = true, noUpdate = true)
 	private BigDecimal amountRef;
+
+	@DsField(join = "left", path = "salesOrder.id")
+	private String salesOrderId;
+
+	@DsField(join = "left", path = "salesOrder.docNo")
+	private String salesOrder;
 
 	public SalesInvoice_Ds() {
 		super();
@@ -337,5 +347,21 @@ public class SalesInvoice_Ds extends AbstractAuditableDs<SalesInvoice> {
 
 	public void setAmountRef(BigDecimal amountRef) {
 		this.amountRef = amountRef;
+	}
+
+	public String getSalesOrderId() {
+		return this.salesOrderId;
+	}
+
+	public void setSalesOrderId(String salesOrderId) {
+		this.salesOrderId = salesOrderId;
+	}
+
+	public String getSalesOrder() {
+		return this.salesOrder;
+	}
+
+	public void setSalesOrder(String salesOrder) {
+		this.salesOrder = salesOrder;
 	}
 }

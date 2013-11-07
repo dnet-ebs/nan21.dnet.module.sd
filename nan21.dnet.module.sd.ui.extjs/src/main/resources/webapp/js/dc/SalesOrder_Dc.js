@@ -41,6 +41,7 @@ Ext.define(Dnet.ns.sd + "SalesOrder_Dc$Filter" , {
 			retFieldMapping: [{lovField:"id", dsParam: "filterProductAccountId"} ],
 			filterFieldMapping: [{lovField:"companyId", dsField: "companyId"}, {lovField:"purchase", value: "true"} ]})
 		.addBooleanField({ name:"confirmed", dataIndex:"confirmed"})
+		.addBooleanField({ name:"invoiced", dataIndex:"invoiced"})
 		.addDateField({name:"docDate_From", dataIndex:"docDate_From", emptyText:"From" })
 		.addDateField({name:"docDate_To", dataIndex:"docDate_To", emptyText:"To" })
 		.addFieldContainer({name: "docDate", fieldLabel:"Doc Date"})
@@ -64,7 +65,7 @@ Ext.define(Dnet.ns.sd + "SalesOrder_Dc$Filter" , {
 		.addChildrenTo("col1", ["company", "bpartner", "docType"])
 		.addChildrenTo("col3", ["docNo", "currency"])
 		.addChildrenTo("col4", ["filterPeriod", "docDate", "filterProduct"])
-		.addChildrenTo("col5", ["confirmed"]);
+		.addChildrenTo("col5", ["confirmed", "invoiced"]);
 	}
 });
 
@@ -99,6 +100,7 @@ Ext.define(Dnet.ns.sd + "SalesOrder_Dc$List" , {
 		.addNumberColumn({ name:"taxAmountRef", dataIndex:"taxAmountRef", hidden:true, decimals:6})
 		.addNumberColumn({ name:"amountRef", dataIndex:"amountRef", hidden:true, decimals:6})
 		.addBooleanColumn({ name:"confirmed", dataIndex:"confirmed"})
+		.addBooleanColumn({ name:"invoiced", dataIndex:"invoiced"})
 		.addDefaults();
 	}
 });
@@ -130,6 +132,36 @@ Ext.define(Dnet.ns.sd + "SalesOrder_Dc$CopyLinesForm" , {
 	_linkElements_: function() {
 		this._getBuilder_()
 		.addChildrenTo("main", ["copyFrom"]);
+	}
+});
+
+/* ================= EDIT FORM: FrmGenInvoice ================= */
+
+Ext.define(Dnet.ns.sd + "SalesOrder_Dc$FrmGenInvoice" , {
+	extend: "dnet.core.dc.view.AbstractDcvEditForm",
+	alias: "widget.sd_SalesOrder_Dc$FrmGenInvoice",
+
+	/**
+	 * Components definition
+	 */
+	_defineElements_: function() {
+		this._getBuilder_()
+		
+		/* =========== controls =========== */
+		.addLov({name:"invDocType", paramIndex:"invDocType", xtype:"md_DocTypes_Lov", caseRestriction:"uppercase",
+			retFieldMapping: [{lovField:"id", dsParam: "invDocTypeId"} ],
+			filterFieldMapping: [{lovField:"category", value: "sales-invoice"}, {lovField:"active", value: "true"} ]})
+		
+		/* =========== containers =========== */
+		.addPanel({ name:"main", autoScroll:true, layout:"form", defaults:{labelAlign:"right", labelWidth:140}});
+	},
+
+	/**
+	 * Combine the components
+	 */			
+	_linkElements_: function() {
+		this._getBuilder_()
+		.addChildrenTo("main", ["invDocType"]);
 	}
 });
 
@@ -196,6 +228,7 @@ Ext.define(Dnet.ns.sd + "SalesOrder_Dc$Edit" , {
 		.addNumberField({name:"taxAmount", dataIndex:"taxAmount", noEdit:true , decimals:6})
 		.addNumberField({name:"amount", dataIndex:"amount", noEdit:true , fieldCls:"important-field", decimals:6})
 		.addBooleanField({ name:"confirmed", dataIndex:"confirmed", noEdit:true })
+		.addBooleanField({ name:"invoiced", dataIndex:"invoiced", noEdit:true })
 		
 		/* =========== containers =========== */
 		.addPanel({ name:"main", autoScroll:true, layout: {type:"hbox", align:'top', pack:'start', defaultMargins: {right:5, left:5}},
@@ -216,7 +249,7 @@ Ext.define(Dnet.ns.sd + "SalesOrder_Dc$Edit" , {
 		.addChildrenTo("col1", ["docType", "company", "bpartner"])
 		.addChildrenTo("col2", ["docDate", "docNo", "currency"])
 		.addChildrenTo("col3", ["netAmount", "taxAmount", "amount"])
-		.addChildrenTo("col4", ["confirmed"])
+		.addChildrenTo("col4", ["confirmed", "invoiced"])
 		.addChildrenTo("col5", ["notes"]);
 	},
 	/* ==================== Business functions ==================== */

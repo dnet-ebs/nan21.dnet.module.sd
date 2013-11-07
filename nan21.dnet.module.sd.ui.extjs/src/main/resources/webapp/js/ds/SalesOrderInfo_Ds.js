@@ -8,6 +8,8 @@ Ext.define(Dnet.ns.sd + "SalesOrderInfo_Ds", {
 	extend: 'Ext.data.Model',
 	
 	fields: [
+		{name:"confirmed", type:"boolean"},
+		{name:"invoiced", type:"boolean"},
 		{name:"bpartnerId", type:"string"},
 		{name:"bpartnerRefid", type:"string"},
 		{name:"billToLocationId", type:"string"},

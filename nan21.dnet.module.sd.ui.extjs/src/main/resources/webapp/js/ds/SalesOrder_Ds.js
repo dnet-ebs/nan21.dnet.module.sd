@@ -27,6 +27,7 @@ Ext.define(Dnet.ns.sd + "SalesOrder_Ds", {
 		{name:"docNo", type:"string"},
 		{name:"docDate", type:"date", dateFormat:Dnet.MODEL_DATE_FORMAT},
 		{name:"confirmed", type:"boolean"},
+		{name:"invoiced", type:"boolean"},
 		{name:"docTypeId", type:"string"},
 		{name:"docType", type:"string"},
 		{name:"currencyId", type:"string"},
@@ -83,6 +84,8 @@ Ext.define(Dnet.ns.sd + "SalesOrder_DsParam", {
 		{name:"copyFromId", type:"string"},
 		{name:"filterPeriod", type:"string", forFilter:true},
 		{name:"filterProductAccount", type:"string", forFilter:true},
-		{name:"filterProductAccountId", type:"string"}
+		{name:"filterProductAccountId", type:"string"},
+		{name:"invDocType", type:"string"},
+		{name:"invDocTypeId", type:"string"}
 	]
 });

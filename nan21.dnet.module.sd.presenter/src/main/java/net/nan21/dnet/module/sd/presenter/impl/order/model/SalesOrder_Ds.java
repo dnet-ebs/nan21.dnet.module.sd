@@ -33,6 +33,7 @@ public class SalesOrder_Ds extends AbstractAuditableDs<SalesOrder> {
 	public static final String f_docNo = "docNo";
 	public static final String f_docDate = "docDate";
 	public static final String f_confirmed = "confirmed";
+	public static final String f_invoiced = "invoiced";
 	public static final String f_docTypeId = "docTypeId";
 	public static final String f_docType = "docType";
 	public static final String f_currencyId = "currencyId";
@@ -63,6 +64,9 @@ public class SalesOrder_Ds extends AbstractAuditableDs<SalesOrder> {
 
 	@DsField(noInsert = true, noUpdate = true)
 	private Boolean confirmed;
+
+	@DsField(noInsert = true, noUpdate = true)
+	private Boolean invoiced;
 
 	@DsField(noUpdate = true, join = "left", path = "docType.id")
 	private String docTypeId;
@@ -157,6 +161,14 @@ public class SalesOrder_Ds extends AbstractAuditableDs<SalesOrder> {
 
 	public void setConfirmed(Boolean confirmed) {
 		this.confirmed = confirmed;
+	}
+
+	public Boolean getInvoiced() {
+		return this.invoiced;
+	}
+
+	public void setInvoiced(Boolean invoiced) {
+		this.invoiced = invoiced;
 	}
 
 	public String getDocTypeId() {

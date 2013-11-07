@@ -286,6 +286,32 @@ Ext.define(Dnet.ns.sd + "SalesInvoice_Ui" , {
 				} , this );
 	}
 	
+	,onAfterDefineDcs: function() {
+		
+								
+								
+								this._getDc_("inv").on("afterDoServiceSuccess", 
+								function() { this._applyStateAllButtons_(); this._syncReadOnlyStates_();} , this );
+								
+								this._getDc_("inv").on("recordChange", this._syncReadOnlyStates_, this );
+	}
+	
+	,_syncReadOnlyStates_: function() {
+		
+							var rec = this._getDc_("inv").getRecord();
+							if (!rec) { return; }
+							var lineDc = this._getDc_("line");
+							if (rec.get("confirmed")) {
+								if (!lineDc.isReadOnly()) {
+									lineDc.setReadOnly(true);
+								}
+							} else {
+								if (lineDc.isReadOnly()) {
+									lineDc.setReadOnly(false);
+								}
+							}
+	}
+	
 	,_when_called_to_edit_: function(params) {
 		
 		var inv = this._getDc_("inv");
@@ -301,5 +327,8 @@ Ext.define(Dnet.ns.sd + "SalesInvoice_Ui" , {
 		inv.setFilterValue("company", params.company );
 		inv.doQuery();
 		this._showStackedViewElement_("main",1);
+	}
+	,_afterDefineDcs_: function() {
+		this.onAfterDefineDcs();
 	}
 });

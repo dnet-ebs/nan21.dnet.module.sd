@@ -49,6 +49,8 @@ Ext.define(Dnet.ns.sd + "SalesInvoice_Ds", {
 		{name:"netAmountRef", type:"float", useNull:true},
 		{name:"taxAmountRef", type:"float", useNull:true},
 		{name:"amountRef", type:"float", useNull:true},
+		{name:"salesOrderId", type:"string"},
+		{name:"salesOrder", type:"string"},
 		{name:"id", type:"string"},
 		{name:"clientId", type:"string"},
 		{name:"createdAt", type:"date", dateFormat:Dnet.MODEL_DATE_FORMAT},

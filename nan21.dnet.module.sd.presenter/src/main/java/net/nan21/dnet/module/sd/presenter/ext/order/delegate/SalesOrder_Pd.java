@@ -45,9 +45,9 @@ public class SalesOrder_Pd extends AbstractPresenterDelegate {
 	 */
 	public void generateInvoice(SalesOrder_Ds ds, SalesOrder_DsParam params)
 			throws Exception {
-//		ISalesOrderService service = ((ISalesOrderService) this
-//				.findEntityService(SalesOrder.class));
-//		service.doGenerateInvoice(ds.getId(), params.get);
+		ISalesOrderService service = ((ISalesOrderService) this
+				.findEntityService(SalesOrder.class));
+		service.doGenerateInvoice(ds.getId(), params.getInvDocTypeId());
 	}
 
 	/**

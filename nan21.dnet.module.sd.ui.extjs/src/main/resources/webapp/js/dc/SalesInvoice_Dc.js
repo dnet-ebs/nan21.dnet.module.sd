@@ -41,6 +41,8 @@ Ext.define(Dnet.ns.sd + "SalesInvoice_Dc$Filter" , {
 		.addLov({name:"filterProduct", paramIndex:"filterProductAccount", xtype:"md_ProductAccounts_Lov", caseRestriction:"uppercase",
 			retFieldMapping: [{lovField:"id", dsParam: "filterProductAccountId"} ],
 			filterFieldMapping: [{lovField:"companyId", dsField: "companyId"}, {lovField:"purchase", value: "true"} ]})
+		.addLov({name:"salesOrder", dataIndex:"salesOrder", xtype:"sd_SalesOrders_Lov",
+			retFieldMapping: [{lovField:"id", dsField: "salesOrderId"} ]})
 		.addBooleanField({ name:"confirmed", dataIndex:"confirmed"})
 		.addBooleanField({ name:"posted", dataIndex:"posted"})
 		.addDateField({name:"docDate_From", dataIndex:"docDate_From", emptyText:"From" })
@@ -64,7 +66,7 @@ Ext.define(Dnet.ns.sd + "SalesInvoice_Dc$Filter" , {
 		this._getBuilder_()
 		.addChildrenTo("main", ["col1", "col3", "col4", "col5"])
 		.addChildrenTo("col1", ["company", "bpartner", "docType"])
-		.addChildrenTo("col3", ["docNo", "currency"])
+		.addChildrenTo("col3", ["docNo", "currency", "salesOrder"])
 		.addChildrenTo("col4", ["filterPeriod", "docDate", "filterProduct"])
 		.addChildrenTo("col5", ["confirmed", "posted"]);
 	}
@@ -89,6 +91,8 @@ Ext.define(Dnet.ns.sd + "SalesInvoice_Dc$List" , {
 		.addTextColumn({ name:"docType", dataIndex:"docType", width:120})
 		.addTextColumn({ name:"docNo", dataIndex:"docNo", width:80})
 		.addDateColumn({ name:"docDate", dataIndex:"docDate", _mask_: Masks.DATE})
+		.addTextColumn({ name:"salesOrderId", dataIndex:"salesOrderId", hidden:true, width:100})
+		.addTextColumn({ name:"salesOrder", dataIndex:"salesOrder", hidden:true, width:200})
 		.addNumberColumn({ name:"netAmount", dataIndex:"netAmount", decimals:6})
 		.addNumberColumn({ name:"taxAmount", dataIndex:"taxAmount", decimals:6})
 		.addNumberColumn({ name:"amount", dataIndex:"amount", decimals:6})
@@ -193,6 +197,7 @@ Ext.define(Dnet.ns.sd + "SalesInvoice_Dc$Edit" , {
 		.addDateField({name:"docDate", dataIndex:"docDate", noEdit:true })
 		.addTextField({ name:"company", dataIndex:"company", noEdit:true , caseRestriction:"uppercase"})
 		.addTextField({ name:"bpartner", dataIndex:"bpartner", noEdit:true , caseRestriction:"uppercase"})
+		.addTextField({ name:"salesOrder", dataIndex:"salesOrder", noEdit:true })
 		.addTextArea({ name:"notes", dataIndex:"notes", height:80})
 		.addTextField({ name:"currency", dataIndex:"currency", noEdit:true , fieldCls:"important-field", caseRestriction:"uppercase"})
 		.addNumberField({name:"netAmount", dataIndex:"netAmount", noEdit:true , decimals:6})
@@ -218,7 +223,7 @@ Ext.define(Dnet.ns.sd + "SalesInvoice_Dc$Edit" , {
 		this._getBuilder_()
 		.addChildrenTo("main", ["col1", "col2", "col3", "col4", "col5"])
 		.addChildrenTo("col1", ["docType", "company", "bpartner"])
-		.addChildrenTo("col2", ["docDate", "docNo", "currency"])
+		.addChildrenTo("col2", ["docDate", "docNo", "currency", "salesOrder"])
 		.addChildrenTo("col3", ["netAmount", "taxAmount", "amount"])
 		.addChildrenTo("col4", ["confirmed", "posted"])
 		.addChildrenTo("col5", ["notes"]);
