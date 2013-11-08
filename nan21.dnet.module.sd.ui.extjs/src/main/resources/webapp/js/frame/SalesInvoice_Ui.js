@@ -36,8 +36,6 @@ Ext.define(Dnet.ns.sd + "SalesInvoice_Ui" , {
 	 */
 	_defineElements_: function() {
 		this._getBuilder_()
-		.addButton({name:"btnShowBpAccount", disabled:true, handler: this.onBtnShowBpAccount,
-				stateManager:{ name:"selected_one", dc:"inv" }, scope:this})
 		.addButton({name:"btnConfirm", iconCls:"icon-action-commit", disabled:true, handler: this.onBtnConfirm,
 				stateManager:{ name:"selected_one_clean", dc:"inv" , and: function(dc) {return (dc.record && !dc.record.get("confirmed"));}}, scope:this})
 		.addButton({name:"btnUnConfirm", iconCls:"icon-action-rollback", disabled:true, handler: this.onBtnUnConfirm,
@@ -46,6 +44,10 @@ Ext.define(Dnet.ns.sd + "SalesInvoice_Ui" , {
 				stateManager:{ name:"selected_one_clean", dc:"inv" , and: function(dc) {return (dc.record && dc.record.get("confirmed")&& !dc.record.get("posted"));}}, scope:this})
 		.addButton({name:"btnUnPost", iconCls:"icon-action-rollback", disabled:true, handler: this.onBtnUnPost,
 				stateManager:{ name:"selected_one_clean", dc:"inv" , and: function(dc) {return (dc.record && dc.record.get("confirmed") &&  dc.record.get("confirmed") && dc.record.get("posted") );}}, scope:this})
+		.addButton({name:"btnShowBpAccount", disabled:true, handler: this.onBtnShowBpAccount,
+				stateManager:{ name:"selected_one", dc:"inv" }, scope:this})
+		.addButton({name:"btnShowOrder", disabled:true, handler: this.onBtnShowOrder,
+				stateManager:{ name:"selected_one", dc:"inv" , and: function(dc) {return (dc.record && dc.record.get("salesOrderId"));}}, scope:this})
 		.addButton({name:"btnShowCopyLines", disabled:true, handler: this.onBtnShowCopyLines,
 				stateManager:{ name:"record_is_clean", dc:"inv" , and: function(dc) {return (dc.record && !dc.record.get("confirmed"));}}, scope:this})
 		.addButton({name:"btnDoCopyLines", disabled:false, handler: this.onBtnDoCopyLines, scope:this})
@@ -118,7 +120,7 @@ Ext.define(Dnet.ns.sd + "SalesInvoice_Ui" , {
 			.addTitle().addSeparator().addSeparator()
 			.addBack().addSave().addNew().addCopy().addCancel().addPrevRec().addNextRec()
 			.addSeparator().addSeparator()
-			.addButtons([this._elems_.get("btnShowBpAccount") ,this._elems_.get("btnShowCopyLines") ,this._elems_.get("btnConfirm") ,this._elems_.get("btnUnConfirm") ,this._elems_.get("btnPost") ,this._elems_.get("btnUnPost") ])
+			.addButtons([this._elems_.get("btnShowBpAccount") ,this._elems_.get("btnShowOrder") ,this._elems_.get("btnShowCopyLines") ,this._elems_.get("btnConfirm") ,this._elems_.get("btnUnConfirm") ,this._elems_.get("btnPost") ,this._elems_.get("btnUnPost") ])
 			.addReports()
 		.end()
 		.beginToolbar("tlbInfoEdit", {dc: "info"})
@@ -163,26 +165,6 @@ Ext.define(Dnet.ns.sd + "SalesInvoice_Ui" , {
 
 	
 	/**
-	 * On-Click handler for button btnShowBpAccount
-	 */
-	,onBtnShowBpAccount: function() {
-		var bundle = Dnet.bundle.sd;
-		var frame = "CustomerAccount_Ui";
-		getApplication().showFrame(frame,{
-			url:Dnet.buildUiPath(bundle, frame, false),
-			params: {
-				company: this._getDc_("inv").getRecord().get("company"),
-				companyId: this._getDc_("inv").getRecord().get("companyId"),
-				bpartner: this._getDc_("inv").getRecord().get("bpartner"),
-				bpartnerId: this._getDc_("inv").getRecord().get("bpartnerId")
-			},
-			callback: function (params) {
-				this._when_called_to_edit_(params);
-			}
-		});
-	}
-	
-	/**
 	 * On-Click handler for button btnConfirm
 	 */
 	,onBtnConfirm: function() {
@@ -224,6 +206,46 @@ Ext.define(Dnet.ns.sd + "SalesInvoice_Ui" , {
 			modal:true
 		};
 		this._getDc_("inv").doRpcData(o);
+	}
+	
+	/**
+	 * On-Click handler for button btnShowBpAccount
+	 */
+	,onBtnShowBpAccount: function() {
+		var bundle = Dnet.bundle.sd;
+		var frame = "CustomerAccount_Ui";
+		getApplication().showFrame(frame,{
+			url:Dnet.buildUiPath(bundle, frame, false),
+			params: {
+				company: this._getDc_("inv").getRecord().get("company"),
+				companyId: this._getDc_("inv").getRecord().get("companyId"),
+				bpartner: this._getDc_("inv").getRecord().get("bpartner"),
+				bpartnerId: this._getDc_("inv").getRecord().get("bpartnerId")
+			},
+			callback: function (params) {
+				this._when_called_to_edit_(params);
+			}
+		});
+	}
+	
+	/**
+	 * On-Click handler for button btnShowOrder
+	 */
+	,onBtnShowOrder: function() {
+		var bundle = Dnet.bundle.sd;
+		var frame = "SalesOrder_Ui";
+		getApplication().showFrame(frame,{
+			url:Dnet.buildUiPath(bundle, frame, false),
+			params: {
+				id: this._getDc_("inv").getRecord().get("salesOrderId"),
+				docNo: this._getDc_("inv").getRecord().get("salesOrder"),
+				company: this._getDc_("inv").getRecord().get("company"),
+				companyId: this._getDc_("inv").getRecord().get("companyId")
+			},
+			callback: function (params) {
+				this._when_called_to_edit_(params);
+			}
+		});
 	}
 	
 	/**

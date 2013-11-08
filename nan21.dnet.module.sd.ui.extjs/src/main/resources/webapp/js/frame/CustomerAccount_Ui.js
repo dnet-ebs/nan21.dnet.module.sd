@@ -14,10 +14,13 @@ Ext.define(Dnet.ns.sd + "CustomerAccount_Ui" , {
 		this._getBuilder_()	
 		.addDc("account", Ext.create(Dnet.ns.md + "CustomerAccount_Dc" ,{}))	
 		.addDc("order", Ext.create(Dnet.ns.sd + "CustomerAccountCtxOrder_Dc" ,{}))	
-		.addDc("invoice", Ext.create(Dnet.ns.sd + "CustomerAccountCtxInvoice_Dc" ,{}))
+		.addDc("invoice", Ext.create(Dnet.ns.sd + "CustomerAccountCtxInvoice_Dc" ,{}))	
+		.addDc("receivable", Ext.create(Dnet.ns.sd + "CustomerAccountCtxReceivable_Dc" ,{}))
 		.linkDc("order", "account",{fields:[
 			{childField:"bpAccountId", parentField:"id"}]}
 		).linkDc("invoice", "account",{fields:[
+			{childField:"bpAccountId", parentField:"id"}]}
+		).linkDc("receivable", "account",{fields:[
 			{childField:"bpAccountId", parentField:"id"}]}
 		);
 	},
@@ -44,6 +47,7 @@ Ext.define(Dnet.ns.sd + "CustomerAccount_Ui" , {
 		})
 		.addDcGridView("invoice", {name:"invoiceList", xtype:"sd_CustomerAccountCtxInvoice_Dc$List"})
 		.addPanel({name:"invoicePanel", _hasTitle_:true, layout:"border", defaults:{split:true}})
+		.addDcGridView("receivable", {name:"receivableList", _hasTitle_:true, xtype:"sd_CustomerAccountCtxReceivable_Dc$List"})
 		.addPanel({name:"main", layout:"card", activeItem:0})
 		.addPanel({name:"canvas1", preventHeader:true, isCanvas:true, layout:"border", defaults:{split:true}})
 		.addPanel({name:"canvas2", preventHeader:true, isCanvas:true, layout:"border", defaults:{split:true}})
@@ -60,11 +64,12 @@ Ext.define(Dnet.ns.sd + "CustomerAccount_Ui" , {
 		.addChildrenTo("main", ["canvas1", "canvas2"])
 		.addChildrenTo("canvas1", ["accountFilter", "accountList"], ["north", "center"])
 		.addChildrenTo("canvas2", ["accountEdit", "accountDetailsTab"], ["north", "center"])
-		.addChildrenTo("accountDetailsTab", ["orderPanel", "invoicePanel"])
+		.addChildrenTo("accountDetailsTab", ["orderPanel", "invoicePanel", "receivableList"])
 		.addToolbarTo("canvas1", "tlbAccountList")
 		.addToolbarTo("canvas2", "tlbAccountEdit")
-		.addToolbarTo("orderList", "tlbOrdersList")
-		.addToolbarTo("invoiceList", "tlbInvoicesList");
+		.addToolbarTo("orderList", "tlbOrderList")
+		.addToolbarTo("invoiceList", "tlbInvoiceList")
+		.addToolbarTo("receivableList", "tlbReceivablesList");
 	},
 	
 	/**
@@ -84,7 +89,7 @@ Ext.define(Dnet.ns.sd + "CustomerAccount_Ui" , {
 			.addButtons([this._elems_.get("btnShowBpAccount") ])
 			.addReports()
 		.end()
-		.beginToolbar("tlbOrdersList", {dc: "order"})
+		.beginToolbar("tlbOrderList", {dc: "order"})
 			.addTitle().addSeparator().addSeparator()
 			.addQuery()
 			.addSeparator().addAutoLoad()
@@ -92,12 +97,18 @@ Ext.define(Dnet.ns.sd + "CustomerAccount_Ui" , {
 			.addButtons([this._elems_.get("btnShowOrder") ])
 			.addReports()
 		.end()
-		.beginToolbar("tlbInvoicesList", {dc: "invoice"})
+		.beginToolbar("tlbInvoiceList", {dc: "invoice"})
 			.addTitle().addSeparator().addSeparator()
 			.addQuery()
 			.addSeparator().addAutoLoad()
 			.addSeparator().addSeparator()
 			.addButtons([this._elems_.get("btnShowInvoice") ])
+			.addReports()
+		.end()
+		.beginToolbar("tlbReceivablesList", {dc: "receivable"})
+			.addTitle().addSeparator().addSeparator()
+			.addQuery()
+			.addSeparator().addAutoLoad()
 			.addReports()
 		.end();
 	}

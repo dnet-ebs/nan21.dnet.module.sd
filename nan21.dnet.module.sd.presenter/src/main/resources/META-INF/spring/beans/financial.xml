@@ -57,4 +57,14 @@
 		<property name="entityClass" value="net.nan21.dnet.module.tx.domain.impl.financial.Payment"/>
 		<property name="readOnly" value="true" />
 	</bean>
+	
+	<!-- ==================== Receivable ==================== -->
+		
+	<bean id="Receivable_Ds" scope="singleton" lazy-init="true"
+		class="net.nan21.dnet.core.presenter.service.ds.DefaultEntityDsService">
+		<property name="modelClass" value="net.nan21.dnet.module.sd.presenter.impl.financial.model.Receivable_Ds"/>
+		<property name="filterClass" value="net.nan21.dnet.module.sd.presenter.impl.financial.model.Receivable_DsFilter"/>
+		<property name="entityClass" value="net.nan21.dnet.module.tx.domain.impl.financial.AmountOwed"/>
+		<property name="readOnly" value="true" />
+	</bean>
 </beans>
