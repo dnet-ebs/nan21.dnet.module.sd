@@ -62,4 +62,18 @@ public class PaymentIn_Pd extends AbstractPresenterDelegate {
 		Payment e = srv.findById(ds.getId());
 		srv.doUnPost(e);
 	}
+
+	/**
+	 * Remove the allocated amounts.
+	 * 
+	 * @param ds
+	 * @throws Exception
+	 */
+	public void removeAmounts(PaymentIn_Ds ds) throws Exception {
+		IPaymentService srv = ((IPaymentService) this
+				.findEntityService(Payment.class));
+		Payment e = srv.findById(ds.getId());
+		srv.doRemoveAmounts(e);
+	}
+
 }

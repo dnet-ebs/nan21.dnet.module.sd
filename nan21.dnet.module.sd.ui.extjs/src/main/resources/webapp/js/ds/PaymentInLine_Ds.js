@@ -4,24 +4,23 @@
  * Use is subject to license terms.
  */
 	
-Ext.define(Dnet.ns.sd + "SalesOrderInfo_Ds", {
+Ext.define(Dnet.ns.sd + "PaymentInLine_Ds", {
 	extend: 'Ext.data.Model',
 	
 	fields: [
-		{name:"confirmed", type:"boolean"},
-		{name:"invoiced", type:"boolean"},
-		{name:"bpartnerId", type:"string"},
-		{name:"bpartnerRefid", type:"string"},
-		{name:"billToLocationId", type:"string"},
-		{name:"billToLocationRefId", type:"string"},
-		{name:"billToLocation", type:"string"},
-		{name:"billToContactId", type:"string"},
-		{name:"billToContact", type:"string"},
-		{name:"shipToLocationId", type:"string"},
-		{name:"shipToLocationRefId", type:"string"},
-		{name:"shipToLocation", type:"string"},
-		{name:"shipToContactId", type:"string"},
-		{name:"shipToContact", type:"string"},
+		{name:"quantity", type:"float", useNull:true},
+		{name:"unitPrice", type:"float", useNull:true},
+		{name:"amount", type:"float", useNull:true},
+		{name:"paymentId", type:"string"},
+		{name:"paymentDocNo", type:"string"},
+		{name:"companyId", type:"string"},
+		{name:"company", type:"string"},
+		{name:"productAccountId", type:"string"},
+		{name:"productId", type:"string"},
+		{name:"product", type:"string"},
+		{name:"productName", type:"string"},
+		{name:"uomId", type:"string"},
+		{name:"uom", type:"string"},
 		{name:"id", type:"string"},
 		{name:"clientId", type:"string"},
 		{name:"createdAt", type:"date", dateFormat:Dnet.MODEL_DATE_FORMAT},

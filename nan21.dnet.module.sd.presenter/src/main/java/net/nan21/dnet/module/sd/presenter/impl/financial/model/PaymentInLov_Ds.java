@@ -8,10 +8,11 @@ package net.nan21.dnet.module.sd.presenter.impl.financial.model;
 import java.util.Date;
 import net.nan21.dnet.core.api.annotation.Ds;
 import net.nan21.dnet.core.api.annotation.DsField;
+import net.nan21.dnet.core.api.annotation.SortField;
 import net.nan21.dnet.core.presenter.model.AbstractAuditableLov;
 import net.nan21.dnet.module.tx.domain.impl.financial.Payment;
 
-@Ds(entity = Payment.class)
+@Ds(entity = Payment.class, jpqlWhere = " e.direction = 'in' ", sort = {@SortField(field = PaymentInLov_Ds.f_docNo)})
 public class PaymentInLov_Ds extends AbstractAuditableLov<Payment> {
 
 	public static final String f_docNo = "docNo";

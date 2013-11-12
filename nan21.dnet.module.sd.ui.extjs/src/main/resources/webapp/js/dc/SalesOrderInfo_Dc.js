@@ -33,18 +33,13 @@ Ext.define(Dnet.ns.sd + "SalesOrderInfo_Dc$Edit" , {
 		.addLov({name:"shipToContact", dataIndex:"shipToContact", xtype:"md_BpContacts_Lov",
 			retFieldMapping: [{lovField:"id", dsField: "shipToContactId"} ],
 			filterFieldMapping: [{lovField:"businessPartnerId", dsField: "bpartnerId"}, {lovField:"active", value: "true"} ]})
-		.addLov({name:"paymentMethod", dataIndex:"paymentMethod", xtype:"md_DocTypes_Lov", caseRestriction:"uppercase",
-			retFieldMapping: [{lovField:"id", dsField: "paymentMethodId"} ],
-			filterFieldMapping: [{lovField:"active", value: "true"}, {lovField:"category", value: "payment-in"} ]})
-		.addLov({name:"paymentTerm", dataIndex:"paymentTerm", xtype:"md_PaymentTerms_Lov",
-			retFieldMapping: [{lovField:"id", dsField: "paymentTermId"} ],
-			filterFieldMapping: [{lovField:"active", value: "true"} ]})
+		.addTextArea({ name:"notes", dataIndex:"notes", height:80})
 		
 		/* =========== containers =========== */
 		.addPanel({ name:"main", autoScroll:true})
 		.addPanel({ name:"panelBilling", title:"Invoice", width:400, layout:"form", xtype:"fieldset", border:true, collapsible:true})
 		.addPanel({ name:"panelShipping", title:"Delivery", width:400, layout:"form", xtype:"fieldset", border:true, collapsible:true})
-		.addPanel({ name:"panelPayment", title:"Payment", width:400, layout:"form", xtype:"fieldset", border:true, collapsible:true});
+		.addPanel({ name:"panelNotes", width:400, layout:"form", xtype:"fieldset", border:true, collapsible:true, defaults:{labelAlign:"top"}});
 	},
 
 	/**
@@ -52,10 +47,10 @@ Ext.define(Dnet.ns.sd + "SalesOrderInfo_Dc$Edit" , {
 	 */			
 	_linkElements_: function() {
 		this._getBuilder_()
-		.addChildrenTo("main", ["panelShipping", "panelBilling", "panelPayment"])
+		.addChildrenTo("main", ["panelShipping", "panelBilling", "panelNotes"])
 		.addChildrenTo("panelBilling", ["billToLocation", "billToContact"])
 		.addChildrenTo("panelShipping", ["shipToLocation", "shipToContact"])
-		.addChildrenTo("panelPayment", ["paymentTerm", "paymentMethod"]);
+		.addChildrenTo("panelNotes", ["notes"]);
 	},
 	/* ==================== Business functions ==================== */
 	

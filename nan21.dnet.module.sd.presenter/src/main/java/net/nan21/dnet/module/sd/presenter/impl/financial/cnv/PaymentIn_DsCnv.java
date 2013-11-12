@@ -20,10 +20,10 @@ public class PaymentIn_DsCnv extends AbstractDsConverter<PaymentIn_Ds, Payment>
 	protected void modelToEntityReferences(PaymentIn_Ds ds, Payment e,
 			boolean isInsert, EntityManager em) throws Exception {
 
-		if (ds.getBpartnerId() == null) {
+		if (ds.getCustomerId() == null) {
 			BusinessPartner x = ((IBusinessPartnerService) findEntityService(BusinessPartner.class))
-					.findByCode(ds.getBpartner());
-			ds.setBpartnerId(x.getId());
+					.findByCode(ds.getCustomer());
+			ds.setCustomerId(x.getId());
 		}
 		super.modelToEntityReferences(ds, e, isInsert, em);
 	}

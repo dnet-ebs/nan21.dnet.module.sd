@@ -10,10 +10,11 @@
 	<!-- ==================== PaymentIn ==================== -->
 		
 	<bean id="PaymentIn_Ds" scope="singleton" lazy-init="true"
-		class="net.nan21.dnet.core.presenter.service.ds.DefaultEntityDsService">
+		class="net.nan21.dnet.module.sd.presenter.impl.financial.service.PaymentIn_DsService">
 		<property name="modelClass" value="net.nan21.dnet.module.sd.presenter.impl.financial.model.PaymentIn_Ds"/>
 		<property name="filterClass" value="net.nan21.dnet.module.sd.presenter.impl.financial.model.PaymentIn_DsFilter"/>
 		<property name="entityClass" value="net.nan21.dnet.module.tx.domain.impl.financial.Payment"/>
+		<property name="paramClass" value="net.nan21.dnet.module.sd.presenter.impl.financial.model.PaymentIn_DsParam"/>
 		<property name="converterClass" value="net.nan21.dnet.module.sd.presenter.impl.financial.cnv.PaymentIn_DsCnv" />
 		<property name="rpcData" >
 			<map>
@@ -45,6 +46,12 @@
 						<constructor-arg name="reloadFromEntity" value="true" />
 					</bean>
 				</entry>
+				<entry key="removeAmounts">
+					<bean class="net.nan21.dnet.core.presenter.descriptor.RpcDefinition">
+						<constructor-arg name="delegateClass" value="net.nan21.dnet.module.sd.presenter.ext.financial.delegate.PaymentIn_Pd"/>
+						<constructor-arg name="methodName" value="removeAmounts" />
+					</bean>
+				</entry>
 			</map>
 		</property>
 	</bean>
@@ -66,5 +73,43 @@
 		<property name="filterClass" value="net.nan21.dnet.module.sd.presenter.impl.financial.model.Receivable_DsFilter"/>
 		<property name="entityClass" value="net.nan21.dnet.module.tx.domain.impl.financial.AmountOwed"/>
 		<property name="readOnly" value="true" />
+	</bean>
+	
+	<!-- ==================== PaymentInAmountCtx ==================== -->
+		
+	<bean id="PaymentInAmountCtx_Ds" scope="singleton" lazy-init="true"
+		class="net.nan21.dnet.core.presenter.service.ds.DefaultEntityDsService">
+		<property name="modelClass" value="net.nan21.dnet.module.sd.presenter.impl.financial.model.PaymentInAmountCtx_Ds"/>
+		<property name="filterClass" value="net.nan21.dnet.module.sd.presenter.impl.financial.model.PaymentInAmountCtx_DsFilter"/>
+		<property name="entityClass" value="net.nan21.dnet.module.tx.domain.impl.financial.PaymentAmount"/>
+	</bean>
+	
+	<!-- ==================== PaymentInAmount ==================== -->
+		
+	<bean id="PaymentInAmount_Ds" scope="singleton" lazy-init="true"
+		class="net.nan21.dnet.core.presenter.service.ds.DefaultEntityDsService">
+		<property name="modelClass" value="net.nan21.dnet.module.sd.presenter.impl.financial.model.PaymentInAmount_Ds"/>
+		<property name="filterClass" value="net.nan21.dnet.module.sd.presenter.impl.financial.model.PaymentInAmount_DsFilter"/>
+		<property name="entityClass" value="net.nan21.dnet.module.tx.domain.impl.financial.PaymentAmount"/>
+	</bean>
+	
+	<!-- ==================== PaymentInAmountProposal ==================== -->
+		
+	<bean id="PaymentInAmountProposal_Ds" scope="singleton" lazy-init="true"
+		class="net.nan21.dnet.module.sd.presenter.ext.financial.service.PaymentInAmountProposal_DsService">
+		<property name="modelClass" value="net.nan21.dnet.module.sd.presenter.impl.financial.model.PaymentInAmountProposal_Ds"/>
+		<property name="filterClass" value="net.nan21.dnet.module.sd.presenter.impl.financial.model.PaymentInAmountProposal_DsFilter"/>
+		<property name="entityClass" value="net.nan21.dnet.module.tx.domain.impl.financial.AmountOwed"/>
+		<property name="paramClass" value="net.nan21.dnet.module.sd.presenter.impl.financial.model.PaymentInAmountProposal_DsParam"/>
+		<property name="readOnly" value="true" />
+	</bean>
+	
+	<!-- ==================== PaymentInLine ==================== -->
+		
+	<bean id="PaymentInLine_Ds" scope="singleton" lazy-init="true"
+		class="net.nan21.dnet.core.presenter.service.ds.DefaultEntityDsService">
+		<property name="modelClass" value="net.nan21.dnet.module.sd.presenter.impl.financial.model.PaymentInLine_Ds"/>
+		<property name="entityClass" value="net.nan21.dnet.module.tx.domain.impl.financial.PaymentLine"/>
+		<property name="converterClass" value="net.nan21.dnet.module.sd.presenter.impl.financial.cnv.PaymentInLine_DsCnv" />
 	</bean>
 </beans>

@@ -1,3 +1,6 @@
 [
-	"nan21.dnet.module.sd.ui.extjs/dc/PaymentIn_Dc"
+	"nan21.dnet.module.sd.ui.extjs/dc/PaymentInAmountCtx_Dc", 
+	"nan21.dnet.module.sd.ui.extjs/dc/PaymentInAmountProposal_Dc", 
+	"nan21.dnet.module.sd.ui.extjs/dc/PaymentIn_Dc", 
+	"nan21.dnet.module.sd.ui.extjs/dc/PaymentInLine_Dc"
 ]

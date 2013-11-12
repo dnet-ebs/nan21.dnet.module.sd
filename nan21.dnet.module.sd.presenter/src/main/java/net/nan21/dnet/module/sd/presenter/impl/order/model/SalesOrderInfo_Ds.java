@@ -7,22 +7,16 @@ package net.nan21.dnet.module.sd.presenter.impl.order.model;
 
 import net.nan21.dnet.core.api.annotation.Ds;
 import net.nan21.dnet.core.api.annotation.DsField;
-import net.nan21.dnet.core.api.annotation.Param;
 import net.nan21.dnet.core.api.annotation.RefLookup;
 import net.nan21.dnet.core.api.annotation.RefLookups;
 import net.nan21.dnet.core.presenter.model.AbstractAuditableDs;
-import net.nan21.dnet.module.md.domain.impl.base.DocType;
-import net.nan21.dnet.module.md.domain.impl.base.PaymentTerm;
 import net.nan21.dnet.module.tx.domain.impl.sale.SalesOrder;
 
 @Ds(entity = SalesOrder.class)
-@RefLookups({
-		@RefLookup(refId = SalesOrderInfo_Ds.f_billToLocationId),
+@RefLookups({@RefLookup(refId = SalesOrderInfo_Ds.f_billToLocationId),
 		@RefLookup(refId = SalesOrderInfo_Ds.f_billToContactId),
 		@RefLookup(refId = SalesOrderInfo_Ds.f_shipToLocationId),
-		@RefLookup(refId = SalesOrderInfo_Ds.f_shipToContactId),
-		@RefLookup(refId = SalesOrderInfo_Ds.f_paymentMethodId, namedQuery = DocType.NQ_FIND_BY_CODE, params = {@Param(name = "code", field = SalesOrderInfo_Ds.f_paymentMethod)}),
-		@RefLookup(refId = SalesOrderInfo_Ds.f_paymentTermId, namedQuery = PaymentTerm.NQ_FIND_BY_NAME, params = {@Param(name = "name", field = SalesOrderInfo_Ds.f_paymentTerm)})})
+		@RefLookup(refId = SalesOrderInfo_Ds.f_shipToContactId)})
 public class SalesOrderInfo_Ds extends AbstractAuditableDs<SalesOrder> {
 
 	public static final String f_confirmed = "confirmed";
@@ -39,11 +33,6 @@ public class SalesOrderInfo_Ds extends AbstractAuditableDs<SalesOrder> {
 	public static final String f_shipToLocation = "shipToLocation";
 	public static final String f_shipToContactId = "shipToContactId";
 	public static final String f_shipToContact = "shipToContact";
-	public static final String f_paymentMethodId = "paymentMethodId";
-	public static final String f_paymentMethod = "paymentMethod";
-	public static final String f_paymentMethodName = "paymentMethodName";
-	public static final String f_paymentTermId = "paymentTermId";
-	public static final String f_paymentTerm = "paymentTerm";
 
 	@DsField(noInsert = true, noUpdate = true)
 	private Boolean confirmed;
@@ -86,21 +75,6 @@ public class SalesOrderInfo_Ds extends AbstractAuditableDs<SalesOrder> {
 
 	@DsField(join = "left", path = "shipToContact.name")
 	private String shipToContact;
-
-	@DsField(join = "left", path = "paymentMethod.id")
-	private String paymentMethodId;
-
-	@DsField(join = "left", path = "paymentMethod.code")
-	private String paymentMethod;
-
-	@DsField(join = "left", path = "paymentMethod.name")
-	private String paymentMethodName;
-
-	@DsField(join = "left", path = "paymentTerm.id")
-	private String paymentTermId;
-
-	@DsField(join = "left", path = "paymentTerm.name")
-	private String paymentTerm;
 
 	public SalesOrderInfo_Ds() {
 		super();
@@ -220,45 +194,5 @@ public class SalesOrderInfo_Ds extends AbstractAuditableDs<SalesOrder> {
 
 	public void setShipToContact(String shipToContact) {
 		this.shipToContact = shipToContact;
-	}
-
-	public String getPaymentMethodId() {
-		return this.paymentMethodId;
-	}
-
-	public void setPaymentMethodId(String paymentMethodId) {
-		this.paymentMethodId = paymentMethodId;
-	}
-
-	public String getPaymentMethod() {
-		return this.paymentMethod;
-	}
-
-	public void setPaymentMethod(String paymentMethod) {
-		this.paymentMethod = paymentMethod;
-	}
-
-	public String getPaymentMethodName() {
-		return this.paymentMethodName;
-	}
-
-	public void setPaymentMethodName(String paymentMethodName) {
-		this.paymentMethodName = paymentMethodName;
-	}
-
-	public String getPaymentTermId() {
-		return this.paymentTermId;
-	}
-
-	public void setPaymentTermId(String paymentTermId) {
-		this.paymentTermId = paymentTermId;
-	}
-
-	public String getPaymentTerm() {
-		return this.paymentTerm;
-	}
-
-	public void setPaymentTerm(String paymentTerm) {
-		this.paymentTerm = paymentTerm;
 	}
 }

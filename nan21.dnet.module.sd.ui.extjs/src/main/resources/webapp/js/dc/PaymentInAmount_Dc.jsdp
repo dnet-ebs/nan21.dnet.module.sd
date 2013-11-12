@@ -1,10 +1,8 @@
 [
-	"nan21.dnet.module.sd.ui.extjs/ds/PaymentIn_Ds", 
-	"nan21.dnet.module.md.ui.extjs/lov/DocTypes_Lov", 
+	"nan21.dnet.module.sd.ui.extjs/ds/PaymentInAmount_Ds", 
 	"nan21.dnet.module.md.ui.extjs/lov/OrgsLegalEntity_Lov", 
 	"nan21.dnet.module.md.ui.extjs/lov/CustomerAccounts_Lov", 
 	"nan21.dnet.module.bd.ui.extjs/lov/Currencies_Lov", 
-	"nan21.dnet.module.md.ui.extjs/lov/FinancialAccounts_Lov", 
 	"nan21.dnet.module.sd.ui.extjs/lov/PaymentsIn_Lov", 
-	"nan21.dnet.module.md.ui.extjs/lov/FiscalPeriods_Lov"
+	"nan21.dnet.module.sd.ui.extjs/lov/SalesInvoices_Lov"
 ]

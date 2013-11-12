@@ -60,10 +60,6 @@ Ext.define(Dnet.ns.sd + "SalesInvoice_Ui" , {
 		.addDcFormView("inv", {name:"invEditMain", xtype:"sd_SalesInvoice_Dc$Edit"})
 		.addDcFormView("info", {name:"infoEdit", _hasTitle_:true, xtype:"sd_SalesInvoiceInfo_Dc$Edit"})
 		.addDcFormView("inv", {name:"copyLinesForm", width:400, xtype:"sd_SalesInvoice_Dc$CopyLinesForm"})
-		.addWindow({name:"wdwCopyLines", _hasTitle_:true, closeAction:'hide', resizable:true, layout:"fit", modal:true,
-			items:[this._elems_.get("copyLinesForm")], 
-					dockedItems:[{xtype:"toolbar", ui:"footer", dock:'bottom', weight:-1,
-						items:[ this._elems_.get("btnDoCopyLines")]}]})
 		.addDcGridView("tax", {name:"taxList", _hasTitle_:true, xtype:"sd_SalesInvoiceTax_Dc$List"})
 		.addDcFilterFormView("line", {name:"lineFilter", _hasTitle_:true, width:250, xtype:"sd_SalesInvoiceLine_Dc$FilterCtx", collapsible:true, collapsed:true
 		})
@@ -72,6 +68,10 @@ Ext.define(Dnet.ns.sd + "SalesInvoice_Ui" , {
 		.addDcGridView("lineTax", {name:"lineTaxList", _hasTitle_:true, width:400, xtype:"sd_SalesInvoiceLineTax_Dc$CtxList", collapsible:true, collapsed:true
 		})
 		.addDcGridView("atch", {name:"atchList", _hasTitle_:true, xtype:"bd_Attachment_Dc$List"})
+		.addWindow({name:"wdwCopyLines", _hasTitle_:true, closeAction:'hide', resizable:true, layout:"fit", modal:true,
+			items:[this._elems_.get("copyLinesForm")], 
+					dockedItems:[{xtype:"toolbar", ui:"footer", dock:'bottom', weight:-1,
+						items:[ this._elems_.get("btnDoCopyLines")]}]})
 		.addWindow({name:"wdwCreate", _hasTitle_:true, closeAction:'hide', resizable:true, layout:"fit", modal:true,
 			items:[this._elems_.get("invCreate")], closable:false
 			, 
@@ -120,7 +120,7 @@ Ext.define(Dnet.ns.sd + "SalesInvoice_Ui" , {
 			.addTitle().addSeparator().addSeparator()
 			.addBack().addSave().addNew().addCopy().addCancel().addPrevRec().addNextRec()
 			.addSeparator().addSeparator()
-			.addButtons([this._elems_.get("btnShowBpAccount") ,this._elems_.get("btnShowOrder") ,this._elems_.get("btnShowCopyLines") ,this._elems_.get("btnConfirm") ,this._elems_.get("btnUnConfirm") ,this._elems_.get("btnPost") ,this._elems_.get("btnUnPost") ])
+			.addButtons([this._elems_.get("btnShowBpAccount") ,this._elems_.get("btnShowOrder") ,this._elems_.get("btnShowCopyLines") ,this._elems_.get("btnConfirm") ,this._elems_.get("btnUnConfirm") ])
 			.addReports()
 		.end()
 		.beginToolbar("tlbInfoEdit", {dc: "info"})
@@ -306,16 +306,10 @@ Ext.define(Dnet.ns.sd + "SalesInvoice_Ui" , {
 				function() {
 					this._getDc_("inv").doReloadRecord();
 				} , this );
-	}
-	
-	,onAfterDefineDcs: function() {
-		
-								
-								
-								this._getDc_("inv").on("afterDoServiceSuccess", 
-								function() { this._applyStateAllButtons_(); this._syncReadOnlyStates_();} , this );
-								
-								this._getDc_("inv").on("recordChange", this._syncReadOnlyStates_, this );
+		this._getDc_("inv").on("afterDoServiceSuccess", 
+			function() { this._applyStateAllButtons_(); this._syncReadOnlyStates_();} , this );
+			
+		this._getDc_("inv").on("recordChange", this._syncReadOnlyStates_, this );
 	}
 	
 	,_syncReadOnlyStates_: function() {
@@ -349,8 +343,5 @@ Ext.define(Dnet.ns.sd + "SalesInvoice_Ui" , {
 		inv.setFilterValue("company", params.company );
 		inv.doQuery();
 		this._showStackedViewElement_("main",1);
-	}
-	,_afterDefineDcs_: function() {
-		this.onAfterDefineDcs();
 	}
 });

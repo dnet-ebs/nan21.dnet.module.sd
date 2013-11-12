@@ -11,7 +11,7 @@ Ext.define(Dnet.ns.sd + "PaymentsIn_Lov" , {
 		getInnerTpl: function() {
 			return '<span>{docNo}, {[ Ext.util.Format.date(values.docDate,Dnet.DATE_FORMAT)  ]}, {bpartnerName}</span>';
 		},
-		width:400, maxHeight:100
+		width:400, maxHeight:250
 	},
 	_editDialog_: {
 		name: "PaymentIn_Ui",

@@ -44,7 +44,7 @@ Ext.define(Dnet.ns.sd + "SalesOrder_Dc$Filter" , {
 		.addBooleanField({ name:"invoiced", dataIndex:"invoiced"})
 		.addDateField({name:"docDate_From", dataIndex:"docDate_From", emptyText:"From" })
 		.addDateField({name:"docDate_To", dataIndex:"docDate_To", emptyText:"To" })
-		.addFieldContainer({name: "docDate", fieldLabel:"Doc Date"})
+		.addFieldContainer({name: "docDate"})
 			.addChildrenTo("docDate",["docDate_From", "docDate_To"])
 		
 		/* =========== containers =========== */
@@ -222,7 +222,12 @@ Ext.define(Dnet.ns.sd + "SalesOrder_Dc$Edit" , {
 		.addDateField({name:"docDate", dataIndex:"docDate", noEdit:true })
 		.addTextField({ name:"company", dataIndex:"company", noEdit:true , caseRestriction:"uppercase"})
 		.addTextField({ name:"bpartner", dataIndex:"bpartner", noEdit:true , caseRestriction:"uppercase"})
-		.addTextArea({ name:"notes", dataIndex:"notes", height:80})
+		.addLov({name:"paymentMethod", dataIndex:"paymentMethod", xtype:"md_DocTypes_Lov", caseRestriction:"uppercase",
+			retFieldMapping: [{lovField:"id", dsField: "paymentMethodId"} ],
+			filterFieldMapping: [{lovField:"active", value: "true"}, {lovField:"category", value: "payment-in"} ]})
+		.addLov({name:"paymentTerm", dataIndex:"paymentTerm", xtype:"md_PaymentTerms_Lov",
+			retFieldMapping: [{lovField:"id", dsField: "paymentTermId"} ],
+			filterFieldMapping: [{lovField:"active", value: "true"} ]})
 		.addTextField({ name:"currency", dataIndex:"currency", noEdit:true , fieldCls:"important-field", caseRestriction:"uppercase"})
 		.addNumberField({name:"netAmount", dataIndex:"netAmount", noEdit:true , decimals:6})
 		.addNumberField({name:"taxAmount", dataIndex:"taxAmount", noEdit:true , decimals:6})
@@ -237,7 +242,7 @@ Ext.define(Dnet.ns.sd + "SalesOrder_Dc$Edit" , {
 		.addPanel({ name:"col2", width:200, layout:"form"})
 		.addPanel({ name:"col3", width:250, layout:"form"})
 		.addPanel({ name:"col4", width:170, layout:"form"})
-		.addPanel({ name:"col5", width:250, layout:"form", defaults:{labelAlign:"top"}});
+		.addPanel({ name:"col5", title:"Payment", width:300, layout:"form", xtype:"fieldset", border:true, collapsible:true});
 	},
 
 	/**
@@ -250,7 +255,7 @@ Ext.define(Dnet.ns.sd + "SalesOrder_Dc$Edit" , {
 		.addChildrenTo("col2", ["docDate", "docNo", "currency"])
 		.addChildrenTo("col3", ["netAmount", "taxAmount", "amount"])
 		.addChildrenTo("col4", ["confirmed", "invoiced"])
-		.addChildrenTo("col5", ["notes"]);
+		.addChildrenTo("col5", ["paymentTerm", "paymentMethod"]);
 	},
 	/* ==================== Business functions ==================== */
 	
