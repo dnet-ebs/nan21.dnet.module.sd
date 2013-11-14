@@ -36,6 +36,7 @@ Ext.define(Dnet.ns.sd + "PaymentIn_Dc$Filter" , {
 		.addLov({name:"finAccount", dataIndex:"finAccount", xtype:"md_FinancialAccounts_Lov", caseRestriction:"uppercase",
 			retFieldMapping: [{lovField:"id", dsField: "finAccountId"} ],
 			filterFieldMapping: [{lovField:"companyId", dsField: "companyId"} ]})
+		.addCombo({ xtype:"combo", name:"usage", dataIndex:"usage", store:[ "amounts", "invoice", "items"]})
 		.addLov({name:"docNo", dataIndex:"docNo", xtype:"sd_PaymentsIn_Lov",
 			retFieldMapping: [{lovField:"id", dsField: "id"} ],
 			filterFieldMapping: [{lovField:"companyId", dsField: "companyId"} ]})
@@ -68,7 +69,7 @@ Ext.define(Dnet.ns.sd + "PaymentIn_Dc$Filter" , {
 	_linkElements_: function() {
 		this._getBuilder_()
 		.addChildrenTo("main", ["col1", "col2", "col3", "col4"])
-		.addChildrenTo("col1", ["company", "finAccount", "customer"])
+		.addChildrenTo("col1", ["company", "finAccount", "customer", "usage"])
 		.addChildrenTo("col2", ["docType", "docNo", "sourceDocNo", "currency"])
 		.addChildrenTo("col3", ["filterPeriod", "docDate", "amount"])
 		.addChildrenTo("col4", ["confirmed", "posted"]);
@@ -102,6 +103,7 @@ Ext.define(Dnet.ns.sd + "PaymentIn_Dc$List" , {
 		.addTextColumn({ name:"currencyId", dataIndex:"currencyId", hidden:true, width:100})
 		.addNumberColumn({ name:"amountLoc", dataIndex:"amountLoc", hidden:true, decimals:6})
 		.addNumberColumn({ name:"amountRef", dataIndex:"amountRef", hidden:true, decimals:6})
+		.addTextColumn({ name:"usage", dataIndex:"usage", hidden:true, width:60})
 		.addBooleanColumn({ name:"confirmed", dataIndex:"confirmed"})
 		.addBooleanColumn({ name:"posted", dataIndex:"posted"})
 		.addBooleanColumn({ name:"generated", dataIndex:"generated", hidden:true})
@@ -173,7 +175,7 @@ Ext.define(Dnet.ns.sd + "PaymentIn_Dc$Edit" , {
 		.addNumberField({name:"amount", dataIndex:"amount", allowBlank:false, fieldCls:"important-field", decimals:6})
 		.addLov({name:"finAccount", dataIndex:"finAccount", xtype:"md_FinancialAccounts_Lov", caseRestriction:"uppercase",
 			retFieldMapping: [{lovField:"id", dsField: "finAccountId"} ],
-			filterFieldMapping: [{lovField:"companyId", dsField: "companyId"} ]})
+			filterFieldMapping: [{lovField:"companyId", dsField: "companyId"}, {lovField:"currencyId", dsField: "currencyId"} ]})
 		.addTextArea({ name:"notes", dataIndex:"notes", height:70})
 		.addTextField({ name:"sourceDocNo", dataIndex:"sourceDocNo"})
 		.addBooleanField({ name:"confirmed", dataIndex:"confirmed", noEdit:true })

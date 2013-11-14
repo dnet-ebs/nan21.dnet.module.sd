@@ -314,18 +314,18 @@ Ext.define(Dnet.ns.sd + "SalesInvoice_Ui" , {
 	
 	,_syncReadOnlyStates_: function() {
 		
-							var rec = this._getDc_("inv").getRecord();
-							if (!rec) { return; }
-							var lineDc = this._getDc_("line");
-							if (rec.get("confirmed")) {
-								if (!lineDc.isReadOnly()) {
-									lineDc.setReadOnly(true);
-								}
-							} else {
-								if (lineDc.isReadOnly()) {
-									lineDc.setReadOnly(false);
-								}
-							}
+		var rec = this._getDc_("inv").getRecord();
+		if (!rec) { return; }
+		var lineDc = this._getDc_("line");
+		if (rec.get("confirmed")) {
+			if (!lineDc.isReadOnly()) {
+				lineDc.setReadOnly(true);
+			}
+		} else {
+			if (lineDc.isReadOnly()) {
+				lineDc.setReadOnly(false);
+			}
+		}
 	}
 	
 	,_when_called_to_edit_: function(params) {
@@ -341,6 +341,23 @@ Ext.define(Dnet.ns.sd + "SalesInvoice_Ui" , {
 		inv.setFilterValue("docNo", params.docNo );
 		inv.setFilterValue("companyId", params.companyId );
 		inv.setFilterValue("company", params.company );
+		inv.doQuery();
+		this._showStackedViewElement_("main",1);
+	}
+	
+	,_when_called_to_edit_by_so_: function(params) {
+		
+		var inv = this._getDc_("inv");
+		if (inv.isDirty()) {
+			this._alert_dirty_();
+			return;
+		}
+		inv.doClearQuery();
+		
+		inv.setFilterValue("companyId", params.companyId );
+		inv.setFilterValue("company", params.company );
+		inv.setFilterValue("salesOrderId", params.salesOrderId );
+		inv.setFilterValue("salesOrder", params.salesOrder );
 		inv.doQuery();
 		this._showStackedViewElement_("main",1);
 	}

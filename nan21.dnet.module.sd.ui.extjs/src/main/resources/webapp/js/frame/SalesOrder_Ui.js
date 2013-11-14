@@ -51,6 +51,8 @@ Ext.define(Dnet.ns.sd + "SalesOrder_Ui" , {
 		.addButton({name:"btnCreateInvoice", disabled:true, handler: this.onBtnCreateInvoice,
 				stateManager:{ name:"selected_one_clean", dc:"ord" , and: function(dc) {return (dc.record && dc.record.get("confirmed") && ! dc.record.get("invoiced"));}}, scope:this})
 		.addButton({name:"btnCreateInvoiceOk", disabled:false, handler: this.onBtnCreateInvoiceOk, scope:this})
+		.addButton({name:"btnShowInvoice", disabled:true, handler: this.onBtnShowInvoice,
+				stateManager:{ name:"selected_one", dc:"ord" , and: function(dc) {return (dc.record.get("invoiced")===true);}}, scope:this})
 		.addDcFilterFormView("ord", {name:"ordFilter", xtype:"sd_SalesOrder_Dc$Filter"})
 		.addDcGridView("ord", {name:"ordList", xtype:"sd_SalesOrder_Dc$List"})
 		.addDcFormView("ord", {name:"ordCreate", xtype:"sd_SalesOrder_Dc$Create", _acquireFocusUpdate_: false})
@@ -122,7 +124,7 @@ Ext.define(Dnet.ns.sd + "SalesOrder_Ui" , {
 			.addTitle().addSeparator().addSeparator()
 			.addBack().addSave().addNew().addCopy().addCancel().addPrevRec().addNextRec()
 			.addSeparator().addSeparator()
-			.addButtons([this._elems_.get("btnShowBpAccount") ,this._elems_.get("btnShowCopyLines") ,this._elems_.get("btnConfirm") ,this._elems_.get("btnUnConfirm") ,this._elems_.get("btnCreateInvoice") ])
+			.addButtons([this._elems_.get("btnShowBpAccount") ,this._elems_.get("btnShowCopyLines") ,this._elems_.get("btnConfirm") ,this._elems_.get("btnUnConfirm") ,this._elems_.get("btnCreateInvoice") ,this._elems_.get("btnShowInvoice") ])
 			.addReports()
 		.end()
 		.beginToolbar("tlbInfoEdit", {dc: "info"})
@@ -280,6 +282,26 @@ Ext.define(Dnet.ns.sd + "SalesOrder_Ui" , {
 		this._getDc_("ord").doRpcData(o);
 	}
 	
+	/**
+	 * On-Click handler for button btnShowInvoice
+	 */
+	,onBtnShowInvoice: function() {
+		var bundle = Dnet.bundle.sd;
+		var frame = "SalesInvoice_Ui";
+		getApplication().showFrame(frame,{
+			url:Dnet.buildUiPath(bundle, frame, false),
+			params: {
+				companyId: this._getDc_("ord").getRecord().get("companyId"),
+				company: this._getDc_("ord").getRecord().get("company"),
+				salesOrderId: this._getDc_("ord").getRecord().get("id"),
+				salesOrder: this._getDc_("ord").getRecord().get("docNo")
+			},
+			callback: function (params) {
+				this._when_called_to_edit_by_so_(params);
+			}
+		});
+	}
+	
 	,_whenCreateNewDoc_: function() {	
 		this._getWindow_("wdwCreate").show();
 	}
@@ -287,17 +309,13 @@ Ext.define(Dnet.ns.sd + "SalesOrder_Ui" , {
 	,_afterDefineDcs_: function() {
 		
 		this._getDc_("ord").on("afterDoNew", this._whenCreateNewDoc_, this);
+		this._getDc_("ord").on("recordChange", this._syncReadOnlyStates_, this );
+		this._getDc_("ord").on("afterDoServiceSuccess", 
+			function() { this._applyStateAllButtons_(); this._syncReadOnlyStates_();} , this );
 		this._getDc_("line").on("afterDoCommitSuccess", 
 				function() {
 					this._getDc_("ord").doReloadRecord();
 				} , this );
-	}
-	
-	,onAfterDefineDcs: function() {
-		
-								this._getDc_("ord").on("afterDoServiceSuccess", 
-								function() { this._applyStateAllButtons_(); this._syncReadOnlyStates_();} , this );
-								this._getDc_("ord").on("recordChange", this._syncReadOnlyStates_, this );
 	}
 	
 	,_syncReadOnlyStates_: function() {
@@ -331,8 +349,5 @@ Ext.define(Dnet.ns.sd + "SalesOrder_Ui" , {
 		ord.setFilterValue("company", params.company );
 		ord.doQuery();
 		this._showStackedViewElement_("main",1);
-	}
-	,_afterDefineDcs_: function() {
-		this.onAfterDefineDcs();
 	}
 });

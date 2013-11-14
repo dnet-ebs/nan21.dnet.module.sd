@@ -58,7 +58,7 @@ Ext.define(Dnet.ns.sd + "SalesOrderInfo_Dc$Edit" , {
 		
 		var retVal = true;
 		if (record.get("invoiced") ) {
-			this._disableFields_(["billToLocation","billToContact","paymentMethod","paymentTerm"]);
+			this._disableFields_(["billToLocation","billToContact" ]);
 			retVal = false;
 		}
 		return retVal;

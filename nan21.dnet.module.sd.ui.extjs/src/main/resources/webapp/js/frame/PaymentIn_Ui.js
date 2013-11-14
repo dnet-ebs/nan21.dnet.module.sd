@@ -21,7 +21,7 @@ Ext.define(Dnet.ns.sd + "PaymentIn_Ui" , {
 		).linkDc("proposal", "payment",{fields:[
 			{childField:"bpAccountId", parentField:"customerAccountId"}]}
 		).linkDc("line", "payment",{fields:[
-			{childField:"paymentId", parentField:"id"}]}
+			{childField:"paymentId", parentField:"id"}, {childField:"companyId", parentField:"companyId"}]}
 		);
 	},
 

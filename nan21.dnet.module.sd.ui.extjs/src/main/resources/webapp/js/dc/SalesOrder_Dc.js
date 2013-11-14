@@ -7,7 +7,18 @@ Ext.define(Dnet.ns.sd + "SalesOrder_Dc" , {
 	extend: "dnet.core.dc.AbstractDc",
 	filterModel: Dnet.ns.sd + "SalesOrder_DsFilter",
 	paramModel: Dnet.ns.sd + "SalesOrder_DsParam",
-	recordModel: Dnet.ns.sd + "SalesOrder_Ds"
+	recordModel: Dnet.ns.sd + "SalesOrder_Ds",
+			
+			/* ================ Business functions ================ */
+	
+	afterDoCopy: function() {
+		
+		this.record.set("docNo", "");
+		this.record.set("netAmount", 0);
+		this.record.set("taxAmount", 0);
+		this.record.set("amount", 0);
+	}
+
 });
 
 /* ================= FILTER FORM: Filter ================= */			
@@ -224,7 +235,7 @@ Ext.define(Dnet.ns.sd + "SalesOrder_Dc$Edit" , {
 		.addTextField({ name:"bpartner", dataIndex:"bpartner", noEdit:true , caseRestriction:"uppercase"})
 		.addLov({name:"paymentMethod", dataIndex:"paymentMethod", xtype:"md_DocTypes_Lov", caseRestriction:"uppercase",
 			retFieldMapping: [{lovField:"id", dsField: "paymentMethodId"} ],
-			filterFieldMapping: [{lovField:"active", value: "true"}, {lovField:"category", value: "payment-in"} ]})
+			filterFieldMapping: [{lovField:"active", value: "true"}, {lovField:"category", value: "payment"} ]})
 		.addLov({name:"paymentTerm", dataIndex:"paymentTerm", xtype:"md_PaymentTerms_Lov",
 			retFieldMapping: [{lovField:"id", dsField: "paymentTermId"} ],
 			filterFieldMapping: [{lovField:"active", value: "true"} ]})

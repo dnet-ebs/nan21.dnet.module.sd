@@ -7,7 +7,18 @@ Ext.define(Dnet.ns.sd + "SalesInvoice_Dc" , {
 	extend: "dnet.core.dc.AbstractDc",
 	filterModel: Dnet.ns.sd + "SalesInvoice_DsFilter",
 	paramModel: Dnet.ns.sd + "SalesInvoice_DsParam",
-	recordModel: Dnet.ns.sd + "SalesInvoice_Ds"
+	recordModel: Dnet.ns.sd + "SalesInvoice_Ds",
+			
+			/* ================ Business functions ================ */
+	
+	afterDoCopy: function() {
+		
+		this.record.set("docNo", "");
+		this.record.set("netAmount", 0);
+		this.record.set("taxAmount", 0);
+		this.record.set("amount", 0);
+	}
+
 });
 
 /* ================= FILTER FORM: Filter ================= */			
