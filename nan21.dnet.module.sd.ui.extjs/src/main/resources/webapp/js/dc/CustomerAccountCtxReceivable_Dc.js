@@ -6,6 +6,7 @@
 Ext.define(Dnet.ns.sd + "CustomerAccountCtxReceivable_Dc" , {
 	extend: "dnet.core.dc.AbstractDc",
 	filterModel: Dnet.ns.sd + "Receivable_DsFilter",
+	paramModel: Dnet.ns.sd + "Receivable_DsParam",
 	recordModel: Dnet.ns.sd + "Receivable_Ds"
 });
 

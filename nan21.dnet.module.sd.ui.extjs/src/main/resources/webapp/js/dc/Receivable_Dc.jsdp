@@ -2,5 +2,7 @@
 	"nan21.dnet.module.sd.ui.extjs/ds/Receivable_Ds", 
 	"nan21.dnet.module.md.ui.extjs/lov/OrgsLegalEntity_Lov", 
 	"nan21.dnet.module.md.ui.extjs/lov/CustomerAccounts_Lov", 
-	"nan21.dnet.module.bd.ui.extjs/lov/Currencies_Lov"
+	"nan21.dnet.module.bd.ui.extjs/lov/Currencies_Lov", 
+	"nan21.dnet.module.sd.ui.extjs/lov/SalesInvoices_Lov", 
+	"nan21.dnet.module.md.ui.extjs/lov/FiscalPeriods_Lov"
 ]
