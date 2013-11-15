@@ -50,7 +50,7 @@ Ext.define(Dnet.ns.sd + "SalesOrder_Dc$Filter" , {
 			retFieldMapping: [{lovField:"startDate", dsField: "docDate_From"} ,{lovField:"endDate", dsField: "docDate_To"} ]})
 		.addLov({name:"filterProduct", paramIndex:"filterProductAccount", xtype:"md_ProductAccounts_Lov", caseRestriction:"uppercase",
 			retFieldMapping: [{lovField:"id", dsParam: "filterProductAccountId"} ],
-			filterFieldMapping: [{lovField:"companyId", dsField: "companyId"}, {lovField:"purchase", value: "true"} ]})
+			filterFieldMapping: [{lovField:"companyId", dsField: "companyId"}, {lovField:"sale", value: "true"} ]})
 		.addBooleanField({ name:"confirmed", dataIndex:"confirmed"})
 		.addBooleanField({ name:"invoiced", dataIndex:"invoiced"})
 		.addDateField({name:"docDate_From", dataIndex:"docDate_From", emptyText:"From" })

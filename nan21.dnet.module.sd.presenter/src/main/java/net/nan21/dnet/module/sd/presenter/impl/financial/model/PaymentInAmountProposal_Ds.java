@@ -13,7 +13,7 @@ import net.nan21.dnet.core.api.annotation.SortField;
 import net.nan21.dnet.core.presenter.model.AbstractAuditableDs;
 import net.nan21.dnet.module.tx.domain.impl.financial.AmountOwed;
 
-@Ds(entity = AmountOwed.class, jpqlWhere = " e.amountInitial <> 0", sort = {@SortField(field = PaymentInAmountProposal_Ds.f_dueDate)})
+@Ds(entity = AmountOwed.class, jpqlWhere = " e.amountDue <> 0 and e.sale = true ", sort = {@SortField(field = PaymentInAmountProposal_Ds.f_dueDate)})
 public class PaymentInAmountProposal_Ds extends AbstractAuditableDs<AmountOwed> {
 
 	public static final String f_companyId = "companyId";
